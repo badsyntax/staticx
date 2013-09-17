@@ -9,6 +9,6 @@ module.exports = {
     '*.json',
     'grunt/**/*.js',
     'lib/**/*.js',
-    'test/**/*.js',
+    'spec/**/*.js',
   ],
 };
