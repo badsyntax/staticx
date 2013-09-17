@@ -1,9 +1,7 @@
 'use strict';
 
-module.exports = function() {
-  return {
-    jshint: require('./jshint'),
-    jasmine_node: require('./jasmine'),
-    jsdoc: require('./jsdoc')
-  };
+module.exports = {
+  jshint: require('./jshint'),
+  jasmine_node: require('./jasmine'),
+  jsdoc: require('./jsdoc')
 };
