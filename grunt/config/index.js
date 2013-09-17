@@ -3,6 +3,7 @@
 module.exports = function() {
   return {
     jshint: require('./jshint'),
-    jasmine_node: require('./jasmine')
+    jasmine_node: require('./jasmine'),
+    jsdoc: require('./jsdoc')
   };
 };
