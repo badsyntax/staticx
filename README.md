@@ -2,6 +2,7 @@
 
 A node.js static site generator.
 
+
 ## Getting Started
 Install the module with: `npm install staticx`
 
