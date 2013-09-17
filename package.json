@@ -1,0 +1,39 @@
+{
+  "name": "staticx",
+  "description": "A node.js static site generator.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/badsyntax/staticx",
+  "author": {
+    "name": "Richard Willis",
+    "email": "willis.rh@gmail.com",
+    "url": "http://badsyntax.co"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/badsyntax/staticx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/badsyntax/staticx/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/badsyntax/staticx/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "lib/staticx",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-watch": "~0.4.0",
+    "grunt": "~0.4.1",
+    "load-grunt-tasks": "~0.1.0",
+    "grunt-jasmine-node": "~0.1.0"
+  },
+  "keywords": []
+}
