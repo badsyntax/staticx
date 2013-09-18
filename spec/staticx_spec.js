@@ -151,5 +151,16 @@ describe('Generating HTML files', function() {
         expect(1).toBe(1);
       });
     });
+
+    it('Should create posts in markdown format', function() {
+
+      var scaffold = staticx.scaffold;
+
+      scaffold.createPosts('spec/fixtures/tmp', 7, function(err) {
+        if (err) {
+          throw err;
+        }
+      });
+    });
   });
 });
