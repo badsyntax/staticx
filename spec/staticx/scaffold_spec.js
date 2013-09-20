@@ -2,8 +2,11 @@
 
 var staticx = require('../../lib/staticx.js');
 var fs = require('fs-extra');
+var async = require('async');
 
 describe('Scaffolding', function() {
+
+  var createdPages = [];
 
   it('Should remove a directory', function(){
 
@@ -24,7 +27,7 @@ describe('Scaffolding', function() {
 
     waitsFor(function() {
       return complete;
-    }, 'Removing the directory took too long', 1000);
+    }, 'Removing the directory took too long.', 1000);
 
     runs(function () {
       // If the test runs without timing out or erroring then it passed.
@@ -51,7 +54,7 @@ describe('Scaffolding', function() {
 
     waitsFor(function() {
       return complete;
-    }, 'Compilation took too long', 3000);
+    }, 'Copy the skeleton took too long.', 3000);
 
     runs(function () {
       // If the test runs without timing out or erroring then it passed.
@@ -62,11 +65,71 @@ describe('Scaffolding', function() {
   it('Should create pages in markdown format', function() {
 
     var scaffold = staticx.scaffold;
+    var complete = false;
 
-    scaffold.createPages('spec/fixtures/tmp', 7, function(err) {
+    scaffold.createPages('spec/fixtures/tmp', 7, function(err, pages) {
+
       if (err) {
         throw err;
       }
+
+      createdPages = pages;
+
+      // Here we check there's actually some content in the generated files.
+      async.series(pages.map(function(page) {
+        return function(done) {
+          fs.exists(page.filePath, function(exists) {
+            if (exists) {
+              fs.readFile(page.filePath, function(err, data) {
+                if (err) {
+                  throw err;
+                }
+                if (!data.toString().trim()) {
+                  done('No data in file create scaffold page file.');
+                } else {
+                  done(null);
+                }
+              });
+            }
+          });
+        };
+      }), function(err) {
+        if (err) {
+          throw err;
+        }
+        complete = true;
+      });
+    });
+
+    waitsFor(function() {
+      return complete;
+    }, 'Creation of pages took too long.', 3000);
+
+    runs(function () {
+      // If the test runs without timing out or erroring then it passed.
+      expect(1).toBe(1);
+    });
+  });
+
+  it('Should remove all created pages', function() {
+
+    var scaffold = staticx.scaffold;
+    var complete = false;
+
+    scaffold.removePages(createdPages, function(err) {
+      if (err) {
+        throw err;
+      }
+      complete = true;
+    });
+
+    waitsFor(function() {
+      return complete;
+    }, 'Removal of pages took too long.', 3000);
+
+    runs(function () {
+      // If the test runs without timing out or erroring then it passed.
+      expect(1).toBe(1);
     });
   });
 });
