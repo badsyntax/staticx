@@ -1,6 +1,6 @@
 ---
-title: Example markdown files
-tags: core, tests
+title: Example title
+tags: tag1, tag2
 ---
 
-some *text* here
+some *markdown* text

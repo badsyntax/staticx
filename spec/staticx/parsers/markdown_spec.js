@@ -7,11 +7,11 @@ describe('Parsing markdown', function() {
 
   var markdown = staticx.parsers.markdown;
 
-  function runTest(text, testHandler, done) {
+  function runTest(method, text, testHandler) {
 
     var parsed;
 
-    markdown.parse(text, function(err, obj) {
+    markdown[method](text, function(err, obj) {
       if (err) {
         throw err;
       }
@@ -29,13 +29,14 @@ describe('Parsing markdown', function() {
 
   it('Should extract the metadata and markdown', function() {
 
+    // NOTE: the extra spaces in this text are intentional.
     var text = '---\n' +
-      'title: Example text\n' +
-      'tags: tag1, tag2\n' +
+      'title: Example text\n  ' +
+      'tags: tag1, tag2\n ' +
       '---\n\n' +
       'some *markdown* text';
 
-    runTest(text, function(parsed) {
+    runTest('parse', text, function(parsed) {
       expect(typeof parsed).toBe('object');
       expect(typeof parsed.metadata).toBe('object');
       expect(parsed.metadata.title).toBe('Example text');
@@ -54,7 +55,7 @@ describe('Parsing markdown', function() {
         'tags: tag1, tag2\n' +
         '---\n\n' +
         'some *markdown* text';
-      runTest(text, function(parsed) {
+      runTest('parse', text, function(parsed) {
         expect(Object.keys(parsed.metadata).length).toBe(0);
         done(null);
       });
@@ -67,7 +68,7 @@ describe('Parsing markdown', function() {
         'tags: tag1, tag2\n' +
         '---\n\n' +
         'some *markdown* text';
-      runTest(text, function(parsed) {
+      runTest('parse', text, function(parsed) {
         expect(typeof parsed.metadata).toBe('object');
         expect(parsed.metadata.tags instanceof Array).toBe(true);
         expect(typeof parsed.metadata.title).toBe('undefined');
@@ -76,5 +77,19 @@ describe('Parsing markdown', function() {
     }
 
     async.parallel([test1, test2]);
+  });
+
+  it('Should extract the metadata and markdown from a file', function() {
+
+    var path = 'spec/fixtures/markdown_with_metadata.md';
+
+    runTest('parseFile', path, function(parsed) {
+      expect(typeof parsed).toBe('object');
+      expect(typeof parsed.metadata).toBe('object');
+      expect(parsed.metadata.title).toBe('Example title');
+      expect(parsed.metadata.tags).toEqual(['tag1','tag2']);
+      expect(typeof parsed.markdown).toBe('string');
+      expect(parsed.markdown).toBe('some *markdown* text');
+    });
   });
 });
