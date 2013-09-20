@@ -29,7 +29,7 @@ describe('Compiling templates', function() {
 
   it('Should compile the template from a file path', function() {
 
-    var path = 'spec/fixtures/template_file_path.hbs';
+    var path = 'spec/fixtures/template.html';
     var data = { title: 'test' };
     var compiled;
 

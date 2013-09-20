@@ -28,7 +28,7 @@ describe('Compiling markdown', function() {
 
   it('Should compile markdown from a file path.', function() {
 
-    var path = 'spec/fixtures/markdown_file_path.md';
+    var path = 'spec/fixtures/markdown.md';
     var compiled;
 
     compiler.compilePath(path, function(err, data) {

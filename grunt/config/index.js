@@ -2,6 +2,6 @@
 
 module.exports = {
   jshint: require('./jshint'),
-  jasmine_node: require('./jasmine'),
+  jasmine_node: require('./jasmine_node'),
   jsdoc: require('./jsdoc')
 };
