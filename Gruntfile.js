@@ -2,12 +2,12 @@
 
 module.exports = function(grunt) {
 
-  /* Set the config */
+  // Set the config.
   grunt.initConfig(require('./grunt/config'));
 
-  /* Load the npm grunt tasks */
+  // Load the npm grunt tasks.
   require('load-grunt-tasks')(grunt, 'grunt-*');
 
-  /* Load our custom grunt tasks */
+  // Load our custom grunt tasks.
   grunt.loadTasks('./grunt/tasks');
 };
