@@ -20,7 +20,7 @@ describe('Scaffold page', function() {
 
   it('Should create the page date', function(){
     var pageDateNow = new Date(date.getTime());
-    var pageDate = page.getPageDate(days, pageDateNow);
+    var pageDate = page.getDate(days, pageDateNow);
     expect(pageDate.getDate()).toBe(pageDate.getDate());
     expect(pageDate.getDay()).toBe(pageDate.getDay());
     expect(pageDate.getFullYear()).toBe(pageDate.getFullYear());
@@ -29,22 +29,22 @@ describe('Scaffold page', function() {
   });
 
   it('Should create the page title', function(){
-    var pageTitle = page.getPageTitle(date);
+    var pageTitle = page.getTitle(date);
     expect(pageTitle).toBe(title);
   });
 
   it('Should create the page slug from the title', function() {
-    var pageSlug = page.getPageSlug(date, title);
+    var pageSlug = page.getSlug(date, title);
     expect(pageSlug).toBe('2011-11-23-blog-page-for-wednesday-november-23rd-2011');
   });
 
   it('Should create the page url', function(){
-    var url = page.getPageUrl(date, title);
+    var url = page.getUrl(date, title);
     expect(url).toBe('2011-11-23-blog-page-for-wednesday-november-23rd-2011.html');
   });
 
   it('Should generate a filepath to save the page data', function() {
-    var filePath = page.getPageFilePath(dest, date, title);
+    var filePath = page.getFilePath(dest, date, title);
     expect(filePath).toBe('spec/fixtures/tmp/2011-11-23-blog-page-for-wednesday-november-23rd-2011.md');
   });
 });
