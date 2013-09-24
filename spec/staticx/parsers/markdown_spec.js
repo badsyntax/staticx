@@ -20,7 +20,7 @@ describe('Parsing markdown', function() {
 
     waitsFor(function() {
       return parsed !== undefined;
-    }, 'Compilation took too long', 1000);
+    }, 'Parsing took too long', 1000);
 
     runs(function(){
       testHandler(parsed);
@@ -56,6 +56,7 @@ describe('Parsing markdown', function() {
         '---\n\n' +
         'some *markdown* text';
       runTest('parse', text, function(parsed) {
+        expect(typeof parsed.metadata).toBe('object');
         expect(Object.keys(parsed.metadata).length).toBe(0);
         done(null);
       });
@@ -76,7 +77,17 @@ describe('Parsing markdown', function() {
       });
     }
 
-    async.parallel([test1, test2]);
+    // Lack of metadata section.
+    function test3(done) {
+      var text = 'some *markdown* text';
+      runTest('parse', text, function(parsed) {
+        expect(typeof parsed.metadata).toBe('object');
+        expect(Object.keys(parsed.metadata).length).toBe(0);
+        done(null);
+      });
+    }
+
+    async.parallel([test1, test2, test3]);
   });
 
   it('Should extract the metadata and markdown from a file', function() {
