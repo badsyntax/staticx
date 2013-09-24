@@ -48,8 +48,18 @@ describe('Parsing markdown', function() {
 
   it('Should not extract the metadata if it\'s badly formatted', function() {
 
-    // Incorrect leading characters.
+    // Lack of metadata section.
     function test1(done) {
+      var text = 'some *markdown* text';
+      runTest('parse', text, function(parsed) {
+        expect(typeof parsed.metadata).toBe('object');
+        expect(Object.keys(parsed.metadata).length).toBe(0);
+        done(null);
+      });
+    }
+
+    // Incorrect leading characters.
+    function test2(done) {
       var text = '----\n' +
         'title: Example text\n' +
         'tags: tag1, tag2\n' +
@@ -63,7 +73,7 @@ describe('Parsing markdown', function() {
     }
 
     // Incorrect data row format.
-    function test2(done) {
+    function test3(done) {
       var text = '---\n' +
         'title Example text\n' +
         'tags: tag1, tag2\n' +
@@ -73,16 +83,6 @@ describe('Parsing markdown', function() {
         expect(typeof parsed.metadata).toBe('object');
         expect(parsed.metadata.tags instanceof Array).toBe(true);
         expect(typeof parsed.metadata.title).toBe('undefined');
-        done(null);
-      });
-    }
-
-    // Lack of metadata section.
-    function test3(done) {
-      var text = 'some *markdown* text';
-      runTest('parse', text, function(parsed) {
-        expect(typeof parsed.metadata).toBe('object');
-        expect(Object.keys(parsed.metadata).length).toBe(0);
         done(null);
       });
     }
