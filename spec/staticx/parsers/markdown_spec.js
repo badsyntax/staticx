@@ -1,7 +1,6 @@
 'use strict';
 
 var staticx = require('../../../lib/staticx');
-var async = require('async');
 
 describe('Parsing markdown', function() {
 
@@ -27,18 +26,17 @@ describe('Parsing markdown', function() {
     });
   }
 
-  it('Should not extract the metadata if it\'s badly formatted', function() {
+  describe('Extracting the metadata if it\'s badly formatted', function() {
 
-    function noMetadataSection(done) {
+    it('Should not extract metadata if there is no metadata section', function() {
       var text = 'some *markdown* text';
       runTest('parse', text, function(parsed) {
         expect(typeof parsed.metadata).toBe('object');
         expect(Object.keys(parsed.metadata).length).toBe(0);
-        done(null);
       });
-    }
+    });
 
-    function incorrectLeadingChars(done) {
+    it('Should not extra metadat if there is incorrect leading characters', function() {
       var text = '----\n' +
         'title: Example text\n' +
         '---\n\n' +
@@ -46,11 +44,10 @@ describe('Parsing markdown', function() {
       runTest('parse', text, function(parsed) {
         expect(typeof parsed.metadata).toBe('object');
         expect(Object.keys(parsed.metadata).length).toBe(0);
-        done(null);
       });
-    }
+    });
 
-    function incorrectTrailingChars(done) {
+    it('Should not extract metadata if there is incorrect trailing characters', function() {
       var text = '---\n' +
         'title: Example text\n' +
         '----\n\n' +
@@ -58,11 +55,10 @@ describe('Parsing markdown', function() {
       runTest('parse', text, function(parsed) {
         expect(typeof parsed.metadata).toBe('object');
         expect(Object.keys(parsed.metadata).length).toBe(0);
-        done(null);
       });
-    }
+    });
 
-    function incorrectLeadingWhiteSpace(done) {
+    it('Should not extract metadata if there is incorrect leading white space', function() {
       var text = ' ---\n' +
         'title: Example text\n' +
         '---\n\n' +
@@ -70,11 +66,10 @@ describe('Parsing markdown', function() {
       runTest('parse', text, function(parsed) {
         expect(typeof parsed.metadata).toBe('object');
         expect(Object.keys(parsed.metadata).length).toBe(0);
-        done(null);
       });
-    }
+    });
 
-    function incorrectTrailingWhiteSpace(done) {
+    it('Should not extract metadata if there is incorrect trailing whitespace', function() {
       var text = '---\n' +
         'title: Example text\n' +
         ' ---\n\n' +
@@ -82,11 +77,10 @@ describe('Parsing markdown', function() {
       runTest('parse', text, function(parsed) {
         expect(typeof parsed.metadata).toBe('object');
         expect(Object.keys(parsed.metadata).length).toBe(0);
-        done(null);
       });
-    }
+    });
 
-    function incorrectDataRowFormat(done) {
+    it('Should not extract metadata from a row if the row if is not formatted correctly.', function() {
       var text = '---\n' +
         'title Example text\n' +
         'tags: tag1, tag2\n' +
@@ -97,23 +91,13 @@ describe('Parsing markdown', function() {
         expect(parsed.metadata.tags instanceof Array).toBe(true);
         expect(parsed.metadata.tags).toEqual(['tag1','tag2']);
         expect(typeof parsed.metadata.title).toBe('undefined');
-        done(null);
       });
-    }
-
-    async.parallel([
-      noMetadataSection,
-      incorrectLeadingChars,
-      incorrectTrailingChars,
-      incorrectLeadingWhiteSpace,
-      incorrectTrailingWhiteSpace,
-      incorrectDataRowFormat
-    ]);
+    });
   });
 
-  it('Should extract the metadata and markdown', function() {
+  describe('Extracting the metadata and markdown when correctly formatted.', function() {
 
-    function defaultProperties() {
+    it('Should extract default properties from the metadata', function() {
       var text = '---\n' +
         'key: value\n' +
         'title: Example text\n' +
@@ -127,9 +111,9 @@ describe('Parsing markdown', function() {
         expect(typeof parsed.markdown).toBe('string');
         expect(parsed.markdown).toBe('some *markdown* text');
       });
-    }
+    });
 
-    function tags() {
+    it('Should extract the tags as an array from the metadata', function() {
       var text = '---\n' +
         'title: Example text\n' +
         'tags: tag1, tag2, tag3\n' +
@@ -142,9 +126,9 @@ describe('Parsing markdown', function() {
         expect(typeof parsed.markdown).toBe('string');
         expect(parsed.markdown).toBe('some *markdown* text');
       });
-    }
+    });
 
-    function extraWhiteSpace() {
+    it('Should extract the metadata when there is excessive whitespace', function() {
       var text = '---\n' +
         'title:  Example text    \n' +
         'tags:    tag1,          tag2  \n' +
@@ -158,26 +142,20 @@ describe('Parsing markdown', function() {
         expect(typeof parsed.markdown).toBe('string');
         expect(parsed.markdown).toBe('some *markdown* text');
       });
-    }
+    });
 
-    async.parallel([
-      defaultProperties,
-      tags,
-      extraWhiteSpace
-    ]);
-  });
+    it('Should extract the metadata and markdown from a file', function() {
 
-  it('Should extract the metadata and markdown from a file', function() {
+      var path = 'spec/fixtures/markdown_with_metadata.md';
 
-    var path = 'spec/fixtures/markdown_with_metadata.md';
-
-    runTest('parseFile', path, function(parsed) {
-      expect(typeof parsed).toBe('object');
-      expect(typeof parsed.metadata).toBe('object');
-      expect(parsed.metadata.title).toBe('Example title');
-      expect(parsed.metadata.tags).toEqual(['tag1','tag2']);
-      expect(typeof parsed.markdown).toBe('string');
-      expect(parsed.markdown).toBe('some *markdown* text');
+      runTest('parseFile', path, function(parsed) {
+        expect(typeof parsed).toBe('object');
+        expect(typeof parsed.metadata).toBe('object');
+        expect(parsed.metadata.title).toBe('Example title');
+        expect(parsed.metadata.tags).toEqual(['tag1','tag2']);
+        expect(typeof parsed.markdown).toBe('string');
+        expect(parsed.markdown).toBe('some *markdown* text');
+      });
     });
   });
 });
