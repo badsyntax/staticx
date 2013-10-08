@@ -47,6 +47,8 @@
     "dateformat": "~1.0.6-1.2.3",
     "async": "~0.2.9",
     "speakingurl": "~0.2.21",
-    "dimsum": "~0.1.8"
+    "dimsum": "~0.1.8",
+    "commander": "~2.0.0",
+    "colors": "~0.6.2"
   }
 }
