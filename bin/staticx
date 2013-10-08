@@ -1,0 +1,44 @@
+#!/usr/bin/env node
+
+var staticx = require('../lib/staticx');
+var program = require('commander');
+var pkg = require('../package');
+var colors = require('colors');
+
+function exit(code, message) {
+
+  console.log(message[[
+    'info',
+    'error'
+  ][code]]);
+
+  process.exit(code);
+}
+
+function create(destination) {
+  staticx.create(destination, function(err) {
+    if (err) {
+      exit(1, err);
+    }
+    exit(0, 'Successfully created a new site at: ' + program.create);
+  });
+}
+
+function main() {
+
+  colors.setTheme({
+    error: 'red',
+    info: 'green'
+  });
+
+  program
+    .version(pkg.version)
+    .option('-c, --create <destination>', 'Create a new site')
+    .parse(process.argv);
+
+  if (program.create) {
+    create(program.create);
+  }
+}
+
+main();
