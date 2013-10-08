@@ -36,7 +36,7 @@ describe('Parsing markdown', function() {
       });
     });
 
-    it('Should not extra metadat if there is incorrect leading characters', function() {
+    it('Should not extra metadata if there is incorrect leading characters', function() {
       var text = '----\n' +
         'title: Example text\n' +
         '---\n\n' +
@@ -80,7 +80,7 @@ describe('Parsing markdown', function() {
       });
     });
 
-    it('Should not extract metadata from a row if the row if is not formatted correctly.', function() {
+    it('Should not extract metadata from a row if the row if is not formatted correctly', function() {
       var text = '---\n' +
         'title Example text\n' +
         'tags: tag1, tag2\n' +
@@ -95,7 +95,7 @@ describe('Parsing markdown', function() {
     });
   });
 
-  describe('Extracting the metadata and markdown when correctly formatted.', function() {
+  describe('Extracting the metadata and markdown when correctly formatted', function() {
 
     it('Should extract default properties from the metadata', function() {
       var text = '---\n' +

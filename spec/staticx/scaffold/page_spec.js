@@ -1,8 +1,8 @@
 'use strict';
 
-var staticx = require('../../../lib/staticx.js');
 var fs = require('fs-extra');
 var dateFormat = require('dateformat');
+var staticx = require('../../../lib/staticx.js');
 var ScaffoldPage = require('../../../lib/staticx/scaffold/page');
 
 describe('Scaffold page', function() {

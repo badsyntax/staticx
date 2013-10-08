@@ -45,6 +45,7 @@ describe('Scaffolding', function() {
     scaffold.copy(source, dest, function(err) {
       if (err) throw err;
       fs.exists(dest, function (exists) {
+        // Ensure the copied files are removed.
         scaffold.remove(dest, function(err) {
           if (err) throw err;
           complete = exists;
