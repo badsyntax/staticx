@@ -14,18 +14,43 @@ var staticx = require('../lib/staticx');
 var program = require('commander');
 var pkg = require('../package');
 var colors = require('colors');
+var path = require('path');
 
 function exit(code, message) {
-  console.log(message[[
+  console.log(String(message)[[
     'info',
     'error'
   ][code]]);
   process.exit(code);
 }
 
+function create(destination, options){
+
+  var start = new Date();
+
+  staticx.create({
+    dest: destination,
+    posts: options.posts,
+    clean: options.clean
+  }, function(err) {
+
+    var end = new Date();
+
+    if (err) {
+      exit(1, err);
+    }
+    else {
+      var msg = 'Successfully created a new site at: ' + path.resolve(destination);
+      msg += ('\nCompleted in ' + (end - start) + 'ms').data;
+      exit(0, msg);
+    }
+  });
+};
+
 colors.setTheme({
   error: 'red',
-  info: 'green'
+  info: 'green',
+  data: 'grey'
 });
 
 program
@@ -34,11 +59,8 @@ program
 program
   .command('create <destination>')
   .description('create a new site')
-  .action(function(destination, options){
-    staticx.create(destination, function(err) {
-      if (err) exit(1, err);
-      else exit(0, 'Successfully created a new site at: ' + destination);
-    });
-  });
+  .option('-p, --posts <posts>', 'number of dummy blog posts to generate', parseInt)
+  .option('-c, --clean', 'clean the destination folder before creating', parseInt)
+  .action(create);
 
 program.parse(process.argv);
