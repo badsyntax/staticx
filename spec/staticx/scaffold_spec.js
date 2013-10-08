@@ -38,12 +38,14 @@ describe('Scaffolding', function() {
   it('Should copy the skeleton files to a new directory', function(){
 
     var scaffold = staticx.scaffold;
-    var source = 'spec/fixtures/site_skeleton';
-    var dest = 'spec/fixtures/tmp/site_skeleton';
+    var source = 'skeleton';
+    var dest = 'spec/fixtures/tmp/skeleton';
     var complete = false;
 
     scaffold.copy(source, dest, function(err) {
-      if (err) throw err;
+      if (err) {
+        throw err;
+      }
       fs.exists(dest, function (exists) {
         // Ensure the copied files are removed.
         scaffold.remove(dest, function(err) {
