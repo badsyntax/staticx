@@ -1,44 +1,44 @@
 #!/usr/bin/env node
 
+/*
+ * staticx
+ * https://github.com/badsyntax/staticx
+ *
+ * Copyright (c) 2013 Richard Willis
+ * Licensed under the MIT license.
+ */
+
+'use strict';
+
 var staticx = require('../lib/staticx');
 var program = require('commander');
 var pkg = require('../package');
 var colors = require('colors');
 
 function exit(code, message) {
-
   console.log(message[[
     'info',
     'error'
   ][code]]);
-
   process.exit(code);
 }
 
-function create(destination) {
-  staticx.create(destination, function(err) {
-    if (err) {
-      exit(1, err);
-    }
-    exit(0, 'Successfully created a new site at: ' + program.create);
+colors.setTheme({
+  error: 'red',
+  info: 'green'
+});
+
+program
+  .version(pkg.version);
+
+program
+  .command('create <destination>')
+  .description('create a new site')
+  .action(function(destination, options){
+    staticx.create(destination, function(err) {
+      if (err) exit(1, err);
+      else exit(0, 'Successfully created a new site at: ' + destination);
+    });
   });
-}
 
-function main() {
-
-  colors.setTheme({
-    error: 'red',
-    info: 'green'
-  });
-
-  program
-    .version(pkg.version)
-    .option('-c, --create <destination>', 'Create a new site')
-    .parse(process.argv);
-
-  if (program.create) {
-    create(program.create);
-  }
-}
-
-main();
+program.parse(process.argv);
