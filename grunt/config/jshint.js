@@ -10,5 +10,6 @@ module.exports = {
     'grunt/**/*.js',
     'lib/**/*.js',
     'spec/**/*.js',
+    'bin/*'
   ],
 };
