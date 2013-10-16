@@ -18,8 +18,12 @@ var path = require('path');
 var prompt = require('prompt');
 var fs = require('fs');
 
+/**
+ * Show a colorized log message and exit the process.
+ * @param  {integer}  code      The exit code.
+ * @param  {string}   message   The log message.
+ */
 function exit(code, message) {
-  // Show a colorized log message.
   console.log(String(message)[[
     'info',
     'error'
@@ -27,32 +31,45 @@ function exit(code, message) {
   process.exit(code);
 }
 
-function createAction(options) {
-
-  if (!options.destination || !fs.existsSync(options.destination)) {
-    exit(1, 'Destination path required or invalid.');
-  }
-
-  var start = new Date();
-
-  staticx.create({
-    dest: options.destination,
-    posts: options.posts,
-    clean: options.clean
-  }, function(err) {
-    if (err) {
-      exit(1, err);
+/**
+ * Create command object.
+ * @type {Object}
+ */
+var Create = {
+  init:  function(options) {
+    if (options.interactive) {
+      this.getOptions(this.action);
+    } else {
+      this.action(options);
     }
-    var msg = 'Successfully created a new site at: ' + path.resolve(options.destination);
-    msg += ('\nCompleted in ' + (new Date() - start) + 'ms').data;
-    exit(0, msg);
-  });
-}
+  },
+  /**
+   * Run the create action.
+   * @param  {object} options The options object.
+   */
+  action: function(options) {
 
-function createCommand(options){
+    // FIXME: we should check the path is valid within staticx.create.
+    if (!options.destination) {
+      exit(1, 'Destination path required or invalid.');
+    }
 
-  if (options.interactive) {
+    var start = new Date();
 
+    // TODO: change options to match so we can just pass the options without
+    // creating a new object.
+    staticx.create({
+      dest: options.destination,
+      posts: options.posts,
+      clean: options.clean
+    }, this.onCreate);
+  },
+  /**
+   * Prompt the user for various options.
+   * @param  {Function} done The callback function to run once all options have
+   * been gathered.
+   */
+  getOptions: function(done) {
     prompt.message = 'Create';
     prompt.start();
     prompt.get([{
@@ -83,33 +100,54 @@ function createCommand(options){
         return value.toLowerCase() === 'y';
       }
     }], function (err, result) {
-      if (err) {
-        exit(1, err);
-      }
-      createAction(result);
+      if (err) exit(1, err);
+      done(result);
     });
-    return;
-  }
+  },
+  /**
+   * create handler.
+   * @param  {string} err Error message.
+   */
+  onCreate: function(err) {
 
-  createAction(options);
+    if (err) exit(1, err);
+
+    var msg = 'Successfully created a new site at: ' + path.resolve(options.destination);
+    msg += ('\nCompleted in ' + (new Date() - start) + 'ms').data;
+
+    exit(0, msg);
+  }
 };
 
-colors.setTheme({
-  error: 'red',
-  info: 'green',
-  data: 'grey'
-});
+/**
+ * The CLI object. This object will set the CLI environment and set the
+ * commands which can be run from the CLI.
+ * @type {Object}
+ */
+var CLI = {
+  init: function() {
+    program.version(pkg.version);
+    this.setColors();
+    this.setCommands();
+    program.parse(process.argv);
+  },
+  setColors: function() {
+    colors.setTheme({
+      error: 'red',
+      info: 'green',
+      data: 'grey'
+    });
+  },
+  setCommands: function() {
+    program
+    .command('create')
+    .description('create a new site')
+    .option('-d, --destination <destination>', 'destination path')
+    .option('-p, --posts <posts>', 'number of dummy blog posts to generate', parseInt)
+    .option('-c, --clean', 'clean the destination folder before creating')
+    .option('-i, --interactive', 'use prompts to set the options')
+    .action(Create.init.bind(Create));
+  }
+};
 
-program
-  .version(pkg.version);
-
-program
-  .command('create')
-  .description('create a new site')
-  .option('-d, --destination <destination>', 'destination path')
-  .option('-p, --posts <posts>', 'number of dummy blog posts to generate', parseInt)
-  .option('-c, --clean', 'clean the destination folder before creating')
-  .option('-i, --interactive', 'use prompts to set the options')
-  .action(createCommand);
-
-program.parse(process.argv);
+CLI.init();
