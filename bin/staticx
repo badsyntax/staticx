@@ -89,7 +89,7 @@ var Create = {
       'Completed in %dms'.data
     ].join('\n');
 
-    exit(0, msg, path.resolve(options.destination), 20);
+    exit(0, msg, path.resolve(options.destination), new Date() - start);
   },
   /**
    * Prompt the user for various options.
