@@ -10,6 +10,9 @@
 
 'use strict';
 
+/**
+ * Load dependencies.
+ */
 var staticx = require('../lib/staticx');
 var program = require('commander');
 var pkg = require('../package');
@@ -18,16 +21,33 @@ var path = require('path');
 var prompt = require('prompt');
 var fs = require('fs');
 
+
+/**
+ * Add colors to a string.
+ * @param  {integer}  code      The exit code.
+ * @param  {boolean}  substr    Is this a substitution string? (eg: 'Example %s')
+ * @param  {string}   message   The message string to colorize.
+ * @param  {integer}  index     The current array index.
+ * @return {string}             The colorized string.
+ */
+function colorize(code, substr, message, index) {
+  return !substr || index === 0 ? message[[
+    'info',
+    'error'
+  ][code]] : message;
+}
+
 /**
  * Show a colorized log message and exit the process.
  * @param  {integer}  code      The exit code.
  * @param  {string}   message   The log message.
  */
 function exit(code, message) {
-  console.log(String(message)[[
-    'info',
-    'error'
-  ][code]]);
+
+  var args = [].slice.call(arguments, 1)
+    .map(colorize.bind(null, code, /\%s/.test(arguments[1])));
+
+  console.log.apply(console, args);
   process.exit(code);
 }
 
@@ -36,6 +56,10 @@ function exit(code, message) {
  * @type {Object}
  */
 var Create = {
+  /**
+   * Start the create command.
+   * @param  {object} options Command options.
+   */
   init:  function(options) {
     if (options.interactive) {
       this.getOptions(this.action.bind(this));
@@ -48,16 +72,24 @@ var Create = {
    * @param  {object} options The options object.
    */
   action: function(options) {
-    staticx.create(options, this.onCreate.bind(this, new Date(), options))
+    staticx.create(options, this.onCreate.bind(this, new Date(), options));
   },
+  /**
+   * Create handler, called after the create action has been run.
+   * @param  {date} start     A date object.
+   * @param  {object} options Command options.
+   * @param  {string} err     An error string if the task fails.
+   */
   onCreate: function(start, options, err) {
 
     if (err) exit(1, err);
 
-    var msg = 'Successfully created a new site at: ' + path.resolve(options.destination);
-    msg += ('\nCompleted in ' + (new Date() - start) + 'ms').data;
+    var msg = [
+      'Successfully created a new site at: %s',
+      'Completed in %dms'.data
+    ].join('\n');
 
-    exit(0, msg);
+    exit(0, msg, path.resolve(options.destination), 20);
   },
   /**
    * Prompt the user for various options.
