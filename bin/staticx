@@ -38,7 +38,7 @@ function exit(code, message) {
 var Create = {
   init:  function(options) {
     if (options.interactive) {
-      this.getOptions(this.action);
+      this.getOptions(this.action.bind(this));
     } else {
       this.action(options);
     }
@@ -48,21 +48,16 @@ var Create = {
    * @param  {object} options The options object.
    */
   action: function(options) {
+    staticx.create(options, this.onCreate.bind(this, new Date(), options))
+  },
+  onCreate: function(start, options, err) {
 
-    // FIXME: we should check the path is valid within staticx.create.
-    if (!options.destination) {
-      exit(1, 'Destination path required or invalid.');
-    }
+    if (err) exit(1, err);
 
-    var start = new Date();
+    var msg = 'Successfully created a new site at: ' + path.resolve(options.destination);
+    msg += ('\nCompleted in ' + (new Date() - start) + 'ms').data;
 
-    // TODO: change options to match so we can just pass the options without
-    // creating a new object.
-    staticx.create({
-      dest: options.destination,
-      posts: options.posts,
-      clean: options.clean
-    }, this.onCreate);
+    exit(0, msg);
   },
   /**
    * Prompt the user for various options.
@@ -103,19 +98,6 @@ var Create = {
       if (err) exit(1, err);
       done(result);
     });
-  },
-  /**
-   * create handler.
-   * @param  {string} err Error message.
-   */
-  onCreate: function(err) {
-
-    if (err) exit(1, err);
-
-    var msg = 'Successfully created a new site at: ' + path.resolve(options.destination);
-    msg += ('\nCompleted in ' + (new Date() - start) + 'ms').data;
-
-    exit(0, msg);
   }
 };
 
