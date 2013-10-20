@@ -85,21 +85,17 @@ var AddPage = _.extend({}, Command, {
   },
   run: function(options) {
 
-    // TODO
     // This should be done withn the addPage method!
     if (!options.title) {
       exit(1, 'Title is required.');
-    }
-    if (!options.date) {
-      exit(1, 'Date is required.');
     }
     if (!options.content) {
       exit(1, 'Content is required.');
     }
 
-    // staticx.addPage(options, function(err) {
-
-    // });
+    staticx.addPage(options, function(err) {
+      if (err) return exit(1, err);
+    });
   },
   getOptions: function(done) {
     prompt.message = 'Add page';
@@ -226,18 +222,18 @@ var CLI = {
     program
     .command('create')
     .description('create a new site')
-    .option('-d, --destination <destination>', 'destination path')
-    .option('-p, --posts <posts>', 'number of dummy blog posts to generate', parseInt)
-    .option('-c, --clean', 'clean the destination folder before creating')
-    .option('-i, --interactive', 'use prompts to set the options')
+    .option('--destination <destination>', 'destination path')
+    .option('--posts <posts>', 'number of dummy blog posts to generate', parseInt)
+    .option('--clean', 'clean the destination folder before creating')
+    .option('--interactive', 'use prompts to set the options')
     .action(Create.init.bind(Create));
 
     program
     .command('addpage')
     .description('add a new page')
-    .option('-t, --title <title>', 'page title')
-    .option('-d, --date <date>', 'page date')
-    .option('-c, --tags <tags>', 'page tags')
+    .option('--title <title>', 'page title')
+    .option('--date <date>', 'page date')
+    .option('--tags <tags>', 'page tags')
     .option('-i, --interactive', 'use prompts to set the options')
     .action(AddPage.init.bind(AddPage));
   }
