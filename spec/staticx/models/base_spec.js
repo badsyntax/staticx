@@ -20,7 +20,9 @@ var TestModel = function() {
   BaseModel.apply(this, arguments);
 };
 require('util').inherits(TestModel, BaseModel);
-TestModel.prototype.getFilePath = function() {};
+TestModel.prototype.getFilePath = function() {
+  return 'spec/fixtures/tmp';
+};
 
 describe('Base Model', function() {
 
@@ -28,8 +30,14 @@ describe('Base Model', function() {
 
     it('Should set the schema and default properties', function() {
       var model = new TestModel();
-      expect(model.schema).toBe(schema);
+      expect(model.schema.date).toEqual(schema.date);
+      expect(model.schema.title).toEqual(schema.title);
       expect(model.date).toBe(null);
+    });
+
+    it('Should set the filepath', function() {
+      var model = new TestModel();
+      expect(model.filePath).toBe('spec/fixtures/tmp');
     });
 
     it('Should create a new schema-validation object', function() {
@@ -71,4 +79,7 @@ describe('Base Model', function() {
     expect(errors.date).not.toBe(undefined);
     expect(errors.date.type).not.toBe(undefined);
   });
+
+  // it('Should save the ')
+
 });
