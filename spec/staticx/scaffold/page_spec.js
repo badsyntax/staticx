@@ -12,7 +12,7 @@ describe('Scaffold page', function() {
   var now = new Date(2011,10,30);
   var page = new ScaffoldPage(dest, days, now);
   var expectedDate = new Date(2011,10,30);
-  expectedDate.setDate(expectedDate.getDate() - (days || 1));
+  expectedDate.setDate(expectedDate.getDate() - (days || 0));
 
   var expectedTitle = 'Blog page for Wednesday, November 23rd, 2011';
   var expectedFilePath = 'spec/fixtures/tmp/2011-11-23-blog-page-for-wednesday-november-23rd-2011.md';
@@ -22,84 +22,32 @@ describe('Scaffold page', function() {
   it('Should create the page date', function(){
 
     var pageDateNow = new Date(expectedDate.getTime());
-    var pageDate = page.getDate(days, pageDateNow);
+    var pageDate = page.date;
 
-    expect(pageDate.getDate()).toBe(pageDate.getDate());
-    expect(pageDate.getDay()).toBe(pageDate.getDay());
-    expect(pageDate.getFullYear()).toBe(pageDate.getFullYear());
-    expect(pageDate.getHours()).toBe(pageDate.getHours());
-    expect(pageDate.getMinutes()).toBe(pageDate.getMinutes());
+    expect(pageDate.getDate()).toBe(expectedDate.getDate());
+    expect(pageDate.getDay()).toBe(expectedDate.getDay());
+    expect(pageDate.getFullYear()).toBe(expectedDate.getFullYear());
+    expect(pageDate.getHours()).toBe(expectedDate.getHours());
+    expect(pageDate.getMinutes()).toBe(expectedDate.getMinutes());
   });
 
   it('Should create the page title', function(){
-    var pageTitle = page.getTitle(expectedDate);
+    var pageTitle = page.title;
     expect(pageTitle).toBe(expectedTitle);
   });
 
   it('Should create the page slug from the title', function() {
-    var pageSlug = page.getSlug(expectedDate, expectedTitle);
+    var pageSlug = page.slug;
     expect(pageSlug).toBe(expectedSlug);
   });
 
   it('Should create the page url', function(){
-    var url = page.getUrl(expectedDate, expectedTitle);
+    var url = page.url;
     expect(url).toBe(expectedUrl);
   });
 
   it('Should generate a filepath to save the page data', function() {
-    var filePath = page.getFilePath(dest, expectedDate, expectedTitle);
+    var filePath = page.filePath;
     expect(filePath).toBe(expectedFilePath);
-  });
-
-  it('Should save the page data to file', function() {
-
-    var complete = false;
-
-    page.saveFile(function(err) {
-      if (err) {
-        throw err;
-      }
-      fs.exists(expectedFilePath, function(exists) {
-        if (exists) {
-          fs.readFile(expectedFilePath, function(err, data) {
-            if (err) {
-              throw err;
-            }
-            complete = !!data.toString();
-          });
-        }
-        complete = exists;
-      });
-    });
-
-    waitsFor(function() {
-      return complete;
-    }, 'Scaffold save page file took too long', 2000);
-
-    runs(function() {
-      expect(1).toBe(1);
-    });
-  });
-
-  it('Should remove the page file', function() {
-
-    var complete = false;
-
-    page.removeFile(function(err) {
-      if (err) {
-        throw err;
-      }
-      fs.exists(expectedFilePath, function(exists) {
-        complete = !exists;
-      });
-    });
-
-    waitsFor(function() {
-      return complete;
-    }, 'Scaffold remove page file took too long', 2000);
-
-    runs(function() {
-      expect(1).toBe(1);
-    });
   });
 });
