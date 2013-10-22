@@ -7,7 +7,7 @@ var PageModel = staticx.models.Page;
 var markdownParser = staticx.parsers.markdown;
 
 var TestModel = function() {
-  this.filePath = 'spec/fixtures/tmp';
+  this.destination = 'spec/fixtures/tmp';
   PageModel.apply(this, arguments);
 };
 require('util').inherits(TestModel, PageModel);

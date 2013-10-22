@@ -15,6 +15,7 @@
  */
 var staticx = require('../lib/staticx');
 var program = require('commander');
+var Globalize = require('globalize');
 var colors = require('colors');
 var path = require('path');
 var prompt = require('prompt');
@@ -84,23 +85,36 @@ var AddPage = _.extend({}, Command, {
     }
   },
   run: function(options) {
+    _.merge(options, {
+      date: Globalize.parseDate(options.date)
+    });
+    var start = new Date();
 
-    // This should be done withn the addPage method!
-    if (!options.title) {
-      exit(1, 'Title is required.');
-    }
-    if (!options.content) {
-      exit(1, 'Content is required.');
-    }
+    staticx.addPage(options, function(err, page) {
 
-    staticx.addPage(options, function(err) {
-      if (err) return exit(1, err);
+      if (err) exit(1, err);
+
+      var msg = [
+        'Successfully created a new page at: %s',
+        'Completed in %dms'.data
+      ].join('\n');
+
+      exit(0, msg, path.resolve(page.filePath), new Date() - start);
     });
   },
   getOptions: function(done) {
     prompt.message = 'Add page';
     prompt.start();
     prompt.get([{
+      name: 'destination',
+      description: 'Destination path',
+      type: 'string',
+      required: true,
+      message: 'Path does not exist',
+      conform: function(value) {
+        return fs.existsSync(value);
+      }
+    }, {
       name: 'title',
       description: 'Page title',
       type: 'string',
@@ -109,7 +123,10 @@ var AddPage = _.extend({}, Command, {
       name: 'date',
       description: 'Page date',
       type: 'string',
-      required: true
+      required: true,
+      conform: function(value) {
+        return (Globalize.parseDate(value) instanceof Date);
+      }
     }, {
       name: 'tags',
       description: 'Page tags',
@@ -136,25 +153,19 @@ var Create = _.extend({}, Command, {
    * @param  {object} options The options object.
    */
   action: function(options) {
-    var done = this.onCreate.bind(this, new Date(), options);
-    staticx.create(options, done);
-  },
-  /**
-   * Create handler, called after the create action has been run.
-   * @param  {date} start     A date object.
-   * @param  {object} options Command options.
-   * @param  {string} err     An error string if the task fails.
-   */
-  onCreate: function(start, options, err) {
 
-    if (err) exit(1, err);
+    var start = new Date();
 
-    var msg = [
-      'Successfully created a new site at: %s',
-      'Completed in %dms'.data
-    ].join('\n');
+    staticx.create(options, function(err) {
+      if (err) exit(1, err);
 
-    exit(0, msg, path.resolve(options.destination), new Date() - start);
+      var msg = [
+        'Successfully created a new site at: %s',
+        'Completed in %dms'.data
+      ].join('\n');
+
+      exit(0, msg, path.resolve(options.destination), new Date() - start);
+    });
   },
   /**
    * Prompt the user for various options.
@@ -231,6 +242,7 @@ var CLI = {
     program
     .command('addpage')
     .description('add a new page')
+    .option('--destination <destination>', 'destination path')
     .option('--title <title>', 'page title')
     .option('--date <date>', 'page date')
     .option('--tags <tags>', 'page tags')
