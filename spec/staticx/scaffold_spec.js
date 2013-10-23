@@ -70,7 +70,10 @@ describe('Scaffolding', function() {
     var scaffold = staticx.scaffold;
     var complete = false;
 
-    scaffold.createPages('spec/fixtures/tmp', 7, function(err, pages) {
+    scaffold.createPages({
+      destination: 'spec/fixtures/tmp',
+      days: 7
+    }, function(err, pages) {
 
       if (err) {
         throw err;
