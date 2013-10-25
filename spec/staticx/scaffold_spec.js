@@ -119,6 +119,8 @@ describe('Scaffolding', function() {
     var scaffold = staticx.scaffold;
     var complete = false;
 
+    // console.log(createdPages);
+
     scaffold.removePages(createdPages, function(err) {
       if (err) {
         throw err;

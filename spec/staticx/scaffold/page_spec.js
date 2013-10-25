@@ -3,14 +3,20 @@
 var fs = require('fs-extra');
 var dateFormat = require('dateformat');
 var staticx = require('../../../lib/staticx.js');
-var ScaffoldPage = require('../../../lib/staticx/scaffold/page');
+var ScaffoldPage = require('../../../lib/staticx/models/page/scaffold');
 
 describe('Scaffold page', function() {
 
   var dest = 'spec/fixtures/tmp';
   var days = 7;
   var now = new Date(2011,10,30);
-  var page = new ScaffoldPage(dest, days, now);
+  var options = {
+    destination: dest,
+    days: days,
+    now: now
+  };
+  var page = new ScaffoldPage(options);
+
   var expectedDate = new Date(2011,10,30);
   expectedDate.setDate(expectedDate.getDate() - (days || 0));
 
@@ -24,6 +30,7 @@ describe('Scaffold page', function() {
     var pageDateNow = new Date(expectedDate.getTime());
     var pageDate = page.date;
 
+    expect(pageDate instanceof Date).toBe(true);
     expect(pageDate.getDate()).toBe(expectedDate.getDate());
     expect(pageDate.getDay()).toBe(expectedDate.getDay());
     expect(pageDate.getFullYear()).toBe(expectedDate.getFullYear());
