@@ -109,10 +109,10 @@ describe('Base Model', function() {
         date: 'Bla',
       };
       var model = new TestModel(data);
-      var errors = model.validate();
-      expect(typeof errors).toBe('object');
-      expect(errors.key).toBe('date');
-      // expect(errors.date.type).not.toBe(undefined);
+      var error = model.validate();
+      expect(typeof error).toBe('object');
+      expect(error.key).toBe('date');
+      expect(error.message).not.toBe(undefined);
     });
   });
 });
