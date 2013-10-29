@@ -23,7 +23,8 @@ describe('Reading pages', function() {
     runs(function(){
       expect(parsed).not.toBe(undefined);
       expect(parsed.length).toBe(3);
-      console.log(parsed);
+      expect(parsed[0].title).toBe('Site Blog');
+      expect(typeof parsed[0].schema).toBe('object');
     });
   });
 });
