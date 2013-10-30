@@ -14,9 +14,7 @@ describe('Scaffolding', function() {
     var complete = false;
 
     fs.mkdir('spec/fixtures/tmp/remove',function(err) {
-      if (err) {
-        console.error(err);
-      }
+      if (err) throw err;
       scaffold.remove('spec/fixtures/tmp/remove', function(err) {
         if (err) throw err;
         fs.exists('spec/fixtures/tmp/remove', function (exists) {
