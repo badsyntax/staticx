@@ -68,7 +68,7 @@ describe('Scaffolding', function() {
     var scaffold = staticx.scaffold;
     var complete = false;
 
-    scaffold.createPages({
+    scaffold.createPosts({
       destination: 'spec/fixtures/tmp',
       posts: 7
     }, function(err, pages) {
