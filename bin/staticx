@@ -61,7 +61,7 @@ var Command = {
    */
   init:  function(options) {
     if (options.interactive) {
-      this.getOptions(this.action.bind(this));
+      this.getOptions(options, this.action.bind(this));
     } else {
       this.action(options);
     }
@@ -85,9 +85,12 @@ var AddPage = _.extend({}, Command, {
     }
   },
   run: function(options) {
+
     _.merge(options, {
-      date: Globalize.parseDate(options.date)
+      date: (!options.date || options.date === 'now') ? new Date() : Globalize.parseDate(options.date),
+      destination: options.destination || process.cwd()
     });
+
     var start = new Date();
 
     staticx.addPage(options, function(err, page) {
@@ -102,18 +105,22 @@ var AddPage = _.extend({}, Command, {
       exit(0, msg, path.resolve(page.filePath), new Date() - start);
     });
   },
-  getOptions: function(done) {
+  getOptions: function(options, done) {
     prompt.message = 'Add page';
     prompt.start();
     prompt.get([{
       name: 'destination',
       description: 'Destination path',
       type: 'string',
-      required: true,
       message: 'Path does not exist',
       conform: function(value) {
-        return fs.existsSync(value);
+        return !value || fs.existsSync(value);
       }
+    }, {
+      name: 'parent',
+      description: 'Parent page',
+      type: 'string',
+      required: false
     }, {
       name: 'title',
       description: 'Page title',
@@ -124,8 +131,9 @@ var AddPage = _.extend({}, Command, {
       description: 'Page date',
       type: 'string',
       required: true,
+      default: 'now',
       conform: function(value) {
-        return (Globalize.parseDate(value) instanceof Date);
+        return (value === 'now' || (Globalize.parseDate(value) instanceof Date));
       }
     }, {
       name: 'tags',
@@ -139,7 +147,7 @@ var AddPage = _.extend({}, Command, {
       required: false
     }], function (err, result) {
       if (err) exit(1, err);
-      done(result);
+      done(_.merge(options, result));
     });
   }
 });
@@ -244,6 +252,7 @@ var CLI = {
     .description('add a new page')
     .option('--destination <destination>', 'destination path')
     .option('--title <title>', 'page title')
+    .option('--parent <parent>', 'parent page')
     .option('--date <date>', 'page date')
     .option('--tags <tags>', 'page tags')
     .option('-i, --interactive', 'use prompts to set the options')

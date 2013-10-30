@@ -72,7 +72,7 @@ describe('Scaffolding', function() {
 
     scaffold.createPages({
       destination: 'spec/fixtures/tmp',
-      days: 7
+      posts: 7
     }, function(err, pages) {
 
       if (err) {
