@@ -56,22 +56,12 @@ describe('Page Model', function() {
     });
   });
 
-  it('Removes the page file', function() {
-    var complete = false;
-
+  it('Removes the page file', function(done) {
     model.delete(function(err) {
       if (err) throw err;
       fs.exists(model.filePath, function(exists) {
-        complete = !exists;
+        done(!exists ? null : 'Page still exists on filesystem');
       });
-    });
-
-    waitsFor(function() {
-      return complete;
-    }, 'Deleting page model took too long', 2000);
-
-    runs(function() {
-      expect(1).toBe(1);
     });
   });
 });
