@@ -120,7 +120,12 @@ var AddPage = _.extend({}, Command, {
       name: 'parent',
       description: 'Parent page',
       type: 'string',
-      required: false
+      required: false,
+      message: 'Parent page does not exist',
+      confirm: function(value) {
+        /** TODO */
+        return false;
+      }
     }, {
       name: 'title',
       description: 'Page title',
@@ -244,7 +249,7 @@ var CLI = {
     .option('--destination <destination>', 'destination path')
     .option('--posts <posts>', 'number of dummy blog posts to generate', parseInt)
     .option('--clean', 'clean the destination folder before creating')
-    .option('--interactive', 'use prompts to set the options')
+    .option('-i, --interactive', 'use prompts to set the options')
     .action(Create.init.bind(Create));
 
     program
