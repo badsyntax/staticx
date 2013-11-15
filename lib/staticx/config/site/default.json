@@ -1,4 +1,5 @@
 {
     "title": "Example title",
-    "author": "Firstname Surname"
+    "author": "Firstname Surname",
+    "fileExtension": "md"
 }

@@ -53,6 +53,7 @@
     "prompt": "~0.2.11",
     "globalize": "~0.1.1",
     "schema-validator": "~3.2.1",
-    "glob": "~3.2.6"
+    "glob": "~3.2.6",
+    "revalidator": "~0.1.5"
   }
 }
