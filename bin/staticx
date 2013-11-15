@@ -106,12 +106,61 @@ var AddPage = _.extend({}, Command, {
     });
   },
   getOptions: function(options, done) {
+
     var model = new staticx.models.Base();
      model.setSchema({
       fileExtension: staticx.models.Page.schema.fileExtension
     });
+
+     /**
+      * Validate the destination path option.
+      * @param  {String} value  The destination option value.
+      * @return {Boolean}       The result of the validation checks.
+      */
+    function validateDestination(value) {
+
+      // Check the destination path exists on the filesystem.
+      model.setSchema({
+        destination: staticx.models.Page.schema.destination
+      });
+      model.setData({
+        destination: value
+      });
+      if (model.validate()) return false;
+
+      // Check a config.json file exists in the destination path.
+      var configPath = path.join(path.resolve(value), 'config.json');
+      try {
+        require(configPath);
+        return true;
+      } catch(e) {
+        exit(1, 'Error: A config.json file does not exist at this path:', configPath);
+        throw e;
+      }
+    }
+
+    /**
+     * Validate the parent page option.
+     * @param  {String} value The parent page option value.
+     * @return {Booleans}       The result of the validation checks.
+     */
+    function validateParent(value) {
+      // Check the parent page exists in the destination path.
+      model.setSchema({
+        destination: staticx.models.Page.schema.destination,
+        parent: staticx.models.Page.schema['parent']
+      });
+      model.setData({
+        parent: value
+      });
+      return !model.validate();
+    }
+
+    /** Begin the prompts */
+
     prompt.message = 'Add page';
     prompt.start();
+
     prompt.get([{
       name: 'destination',
       description: 'Destination path',
@@ -119,27 +168,15 @@ var AddPage = _.extend({}, Command, {
       message: 'Path does not exist',
       default: '.',
       required: true,
-      conform: function(value) {
-        model.setSchema({
-          destination: staticx.models.Page.schema.destination
-        });
-        model.setData({ destination: value });
-        return !model.validate();
-      }
+      conform: validateDestination
     }, {
       name: 'parent',
       description: 'Parent page',
       type: 'string',
       message: 'Parent page does not exist',
       default: '',
-      conform: function(value) {
-        model.setSchema({
-          destination: staticx.models.Page.schema.destination,
-          parent: staticx.models.Page.schema['parent']
-        });
-        model.setData({ parent: value });
-        return !model.validate();
-      }
+      required: false,
+      conform: validateParent
     }, {
       name: 'title',
       description: 'Page title',
