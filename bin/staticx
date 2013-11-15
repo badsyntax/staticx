@@ -106,6 +106,10 @@ var AddPage = _.extend({}, Command, {
     });
   },
   getOptions: function(options, done) {
+    var model = new staticx.models.Base();
+     model.setSchema({
+      fileExtension: staticx.models.Page.schema.fileExtension
+    });
     prompt.message = 'Add page';
     prompt.start();
     prompt.get([{
@@ -113,18 +117,28 @@ var AddPage = _.extend({}, Command, {
       description: 'Destination path',
       type: 'string',
       message: 'Path does not exist',
+      default: '.',
+      required: true,
       conform: function(value) {
-        return !value || fs.existsSync(value);
+        model.setSchema({
+          destination: staticx.models.Page.schema.destination
+        });
+        model.setData({ destination: value });
+        return !model.validate();
       }
     }, {
       name: 'parent',
       description: 'Parent page',
       type: 'string',
-      required: false,
       message: 'Parent page does not exist',
-      confirm: function(value) {
-        /** TODO */
-        return false;
+      default: '',
+      conform: function(value) {
+        model.setSchema({
+          destination: staticx.models.Page.schema.destination,
+          parent: staticx.models.Page.schema['parent']
+        });
+        model.setData({ parent: value });
+        return !model.validate();
       }
     }, {
       name: 'title',
