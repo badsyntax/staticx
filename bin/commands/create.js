@@ -17,6 +17,8 @@ module.exports = _.extend({}, Command, {
   action: function(options) {
     var start = new Date();
 
+    options.source = '../skeleton';
+
     staticx.create(options, function(err) {
       if (err) util.exit(1, err);
 
@@ -60,10 +62,7 @@ module.exports = _.extend({}, Command, {
       pattern: /^[yn]$/i,
       message: 'Please enter either \'y\' or \'n\'',
       default: 'n',
-      required: true,
-      before: function(value) {
-        return value === 'y';
-      }
+      required: true
     }], function (err, result) {
       if (err) util.exit(1, err);
       done(result);
