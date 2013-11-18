@@ -8,11 +8,26 @@ describe('Scaffolding', function() {
 
   it('Should remove a directory', function(done){
     fs.mkdir('spec/fixtures/tmp/remove',function(err) {
-      if (err) throw err;
+      expect(err).toBe(null);
       staticx.scaffold.remove('spec/fixtures/tmp/remove', function(err) {
-        if (err) throw err;
+        expect(err).toBe(null);
         fs.exists('spec/fixtures/tmp/remove', function (exists) {
           done(!exists ? null : 'Directory still exists');
+        });
+      });
+    });
+  });
+
+  it('Should clean a directory', function(done){
+    fs.mkdir('spec/fixtures/tmp/tmpclean', function(err) {
+      expect(err).toBe(null);
+      fs.writeFile('spec/fixtures/tmp/tmpclean/file', 'Hello', function(err) {
+        expect(err).toBe(null);
+        expect(fs.existsSync('spec/fixtures/tmp/tmpclean/file')).toBe(true);
+        staticx.scaffold.clean('spec/fixtures/tmp/tmpclean', function() {
+          expect(fs.existsSync('spec/fixtures/tmp/tmpclean')).toBe(true);
+          expect(fs.existsSync('spec/fixtures/tmp/tmpclean/file')).toBe(false);
+          fs.rmdir('spec/fixtures/tmp/tmpclean', done);
         });
       });
     });
@@ -25,7 +40,7 @@ describe('Scaffolding', function() {
     var dest = 'spec/fixtures/tmp/skeleton';
 
     scaffold.copy(source, dest, function(err) {
-      if (err) throw err;
+      expect(err).toBe(null);
       fs.exists(dest, function (exists) {
         if (!exists) return done('The destination folder does not exists: ' + dest);
         scaffold.clean(dest, done);
@@ -44,7 +59,7 @@ describe('Scaffolding', function() {
         fs.exists(page.filePath, function(exists) {
           if (!exists) return next('Page does not exist on filesystem: ' + page.filePath);
           fs.readFile(page.filePath, function(err, data) {
-            if (err) throw err;
+            expect(err).toBe(null);
             if (!data.toString().trim()) {
               next('No data in file create scaffold page file.');
             } else {
@@ -56,7 +71,7 @@ describe('Scaffolding', function() {
     }
 
     function onCreatePosts(err, posts) {
-      if (err) throw err;
+      expect(err).toBe(null);
       // Expose the created posts so we can use them in other tests.
       createdPosts = posts;
       // Here we check there's actually some content in the generated files...
@@ -71,13 +86,27 @@ describe('Scaffolding', function() {
 
   it('Should remove an array of created pages', function(done) {
     staticx.scaffold.removePages(createdPosts, function(err) {
-      if (err) throw err;
+      expect(err).toBe(null);
       async.forEach(createdPosts, function(post, callback) {
         fs.exists(post.filePath, function(exists) {
           if (exists) return done('Created page still exist on the filesystem: ' + post.filePath);
           callback();
         });
       }, done);
+    });
+  });
+
+  it('Should create a new skeleton site with optional blog posts', function(done) {
+
+    var options = {
+      destination: 'spec/fixtures/tmp/create',
+      posts: '10',
+      clean: 'y'
+    };
+
+    staticx.create(options, function(err) {
+      expect(err).toBe(null);
+      done(null);
     });
   });
 });

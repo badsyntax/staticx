@@ -12,7 +12,7 @@ describe('Reading the site', function() {
     var dir = 'skeleton';
 
     reader.read(dir, function(err, obj) {
-      if (err) throw err;
+      expect(err).toBe(null);
       parsed = obj;
     });
 

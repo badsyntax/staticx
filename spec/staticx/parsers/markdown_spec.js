@@ -11,9 +11,7 @@ describe('Parsing markdown', function() {
     var parsed;
 
     markdown[method](text, function(err, obj) {
-      if (err) {
-        throw err;
-      }
+      expect(err).toBe(null);
       parsed = obj;
     });
 

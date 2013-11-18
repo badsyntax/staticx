@@ -14,7 +14,7 @@ describe('Compiling templates', function() {
     var compiled;
 
     compiler.compile(template, data, function(err, data) {
-      if (err) throw err;
+      expect(err).toBe(null);
       compiled = data;
     });
 
@@ -34,7 +34,7 @@ describe('Compiling templates', function() {
     var compiled;
 
     compiler.compilePath(path, data, function(err, data) {
-      if (err) throw err;
+      expect(err).toBe(null);
       compiled = data;
     });
 

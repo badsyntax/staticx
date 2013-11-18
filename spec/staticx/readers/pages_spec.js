@@ -12,7 +12,7 @@ describe('Reading pages', function() {
     var dir = 'spec/fixtures';
 
     reader.read(dir, function(err, obj) {
-      if (err) throw err;
+      expect(err).toBe(null);
       parsed = obj;
     });
 

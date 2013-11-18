@@ -13,7 +13,7 @@ describe('Compiling markdown', function() {
     var compiled;
 
     compiler.compile(text, function(err, data) {
-      if (err) throw err;
+      expect(err).toBe(null);
       compiled = data;
     });
 
@@ -32,7 +32,7 @@ describe('Compiling markdown', function() {
     var compiled;
 
     compiler.compilePath(path, function(err, data) {
-      if (err) throw err;
+      expect(err).toBe(null);
       compiled = data;
     });
 

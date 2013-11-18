@@ -44,7 +44,7 @@ describe('Page Model', function() {
       if (err) throw err;
       expect(data).toBe(model);
       markdownParser.parseFile(model.filePath, function(err, data) {
-        if (err) throw err;
+        expect(err).toBe(null);
         complete = data;
       });
     });
@@ -61,7 +61,7 @@ describe('Page Model', function() {
 
   it('Removes the page file', function(done) {
     model.delete(function(err) {
-      if (err) throw err;
+      expect(err).toBe(null);
       fs.exists(model.filePath, function(exists) {
         done(!exists ? null : 'Page still exists on filesystem');
       });
@@ -86,7 +86,7 @@ describe('Page Model', function() {
       title: 'test hello',
       date: new Date(),
     }).save(function(err, parentModel) {
-      if (err) throw err;
+      expect(err).toBe(null);
 
       // Check the valid parent page passes validation.
       var model2 = new TestModel({
@@ -106,7 +106,7 @@ describe('Page Model', function() {
       title: 'first level',
       date: new Date(),
     }).save(function(err, firstModel) {
-      if (err) throw err;
+      expect(err).toBe(null);
 
       var parent = path.basename(firstModel.filePath, '.' + firstModel.fileExtension);
 
@@ -116,7 +116,7 @@ describe('Page Model', function() {
         date: new Date(),
         parent: parent
       }).save(function(err, secondModel) {
-        if (err) throw err;
+        expect(err).toBe(null);
 
         var parent = [
           secondModel.parent || '',
@@ -130,7 +130,7 @@ describe('Page Model', function() {
         });
 
         page.save(function(err) {
-          if (err) throw err;
+          expect(err).toBe(null);
           fs.exists(path.join(secondModel.destination, '_pages', parent), function(exists) {
             if (!exists) return done('Parent page directory does not exist');
             fs.exists(page.filePath, function(exists) {
@@ -140,7 +140,7 @@ describe('Page Model', function() {
                 secondModel.delete.bind(secondModel),
                 page.delete.bind(page)
               ], function(err) {
-                if (err) throw err;
+                expect(err).toBe(null);
 
                 /** TODO */
                 // We should check that empty directories are removed.
