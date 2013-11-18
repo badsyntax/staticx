@@ -29,9 +29,9 @@ describe('Page Model', function() {
     it('Should set default properties', function() {
       expect(model.urlExtension).toBe('html');
       expect(model.fileExtension).toBe('md');
-      expect(model.slug).toBe('2013-11-03-example-title');
-      expect(model.url).toBe('2013-11-03-example-title.html');
-      expect(model.filePath).toBe('spec/fixtures/tmp/2013-11-03-example-title.md');
+      expect(model.slug).toBe('example-title');
+      expect(model.url).toBe('example-title.html');
+      expect(model.filePath).toBe('spec/fixtures/tmp/_pages/example-title.md');
       expect(model.date.getTime()).toBe(date.getTime());
     });
   });
@@ -73,11 +73,13 @@ describe('Page Model', function() {
     // Check that an invalid parent page is validated.
     var model1 = new TestModel({
       title: 'test',
-      date: new Date(),
+      date: new Date().toISOString(),
       parent: 'doesnotexist'
     });
-    var error = model1.validate();
-    expect(error.key).toBe('parent');
+    var validate = model1.validate();
+    expect(validate.valid).toBe(false);
+    expect(validate.errors instanceof Array).toBe(true);
+    expect(validate.errors[0].property).toBe('parent');
 
     // Create the parent page.
     new TestModel({
@@ -89,11 +91,11 @@ describe('Page Model', function() {
       // Check the valid parent page passes validation.
       var model2 = new TestModel({
         title: 'test',
-        date: new Date(),
+        date: new Date().toISOString(),
         parent: path.basename(parentModel.filePath, '.' + parentModel.fileExtension)
       });
       var error2 = model2.validate();
-      expect(error2).toBe(undefined);
+      expect(error2.valid).toBe(true);
       parentModel.delete(done);
     });
   });
@@ -123,13 +125,13 @@ describe('Page Model', function() {
 
         var page = new TestModel({
           title: 'third level',
-          date: new Date(),
+          date: new Date().toISOString(),
           parent: parent
         });
 
         page.save(function(err) {
           if (err) throw err;
-          fs.exists(path.join(secondModel.destination, parent), function(exists) {
+          fs.exists(path.join(secondModel.destination, '_pages', parent), function(exists) {
             if (!exists) return done('Parent page directory does not exist');
             fs.exists(page.filePath, function(exists) {
               if (!exists) return done('Page not saved to file');

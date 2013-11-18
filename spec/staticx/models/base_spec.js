@@ -2,15 +2,15 @@
 
 var staticx = require('../../../lib/staticx.js');
 var BaseModel = staticx.models.Base;
-var Validator = require('schema-validator');
 
 var schema = {
   date: {
-    type: Date,
+    type: 'string',
     required: false,
+    format: 'date-time'
   },
   title: {
-    type: String,
+    type: 'string',
     required: true,
     default: 'yes'
   }
@@ -99,20 +99,17 @@ describe('Base Model', function() {
   });
 
   describe('Validation', function() {
-    it('Should create a new schema-validation object', function() {
-      var model = new TestModel();
-      expect(model.validator instanceof Validator).toBe(true);
-    });
     it('Should validate the data against the schema rules', function() {
       var data = {
         title: 'test',
         date: 'Bla',
       };
       var model = new TestModel(data);
-      var error = model.validate();
-      expect(typeof error).toBe('object');
-      expect(error.key).toBe('date');
-      expect(error.message).not.toBe(undefined);
+      var validate = model.validate();
+      expect(typeof validate).toBe('object');
+      expect(validate.valid).toBe(false);
+      expect(validate.errors instanceof Array).toBe(true);
+      expect(validate.errors[0].property).toBe('date');
     });
   });
 });

@@ -39,12 +39,14 @@ describe('Scaffold page', function() {
     var page = new ScaffoldPage({
       date: new Date(2013,11,10)
     });
-    expect(page.slug).toBe('2013-12-10-blog-page-for-tuesday-december-10th-2013');
+    expect(page.slug).toBe('blog-page-for-tuesday-december-10th-2013');
   });
 
   it('Should create the page url', function(){
     var page = new ScaffoldPage({
       date: new Date(2013,11,10)
+    }, {
+      urlFormat: ':year-:month-:day-:slug.:urlExtension'
     });
     expect(page.url).toBe('2013-12-10-blog-page-for-tuesday-december-10th-2013.html');
   });
@@ -54,6 +56,6 @@ describe('Scaffold page', function() {
       date: new Date(2013,11,10),
       destination: 'spec/fixtures/tmp'
     });
-    expect(page.filePath).toBe('spec/fixtures/tmp/2013-12-10-blog-page-for-tuesday-december-10th-2013.md');
+    expect(page.filePath).toBe('spec/fixtures/tmp/_pages/blog-page-for-tuesday-december-10th-2013.md');
   });
 });

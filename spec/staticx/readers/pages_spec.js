@@ -9,7 +9,7 @@ describe('Reading pages', function() {
   it('Should read and parse page files', function() {
 
     var parsed;
-    var dir = 'spec/fixtures/_pages';
+    var dir = 'spec/fixtures';
 
     reader.read(dir, function(err, obj) {
       if (err) throw err;

@@ -59,7 +59,8 @@ var Command = {
    * Start the command.
    * @param  {object} options Command options.
    */
-  init:  function(options) {
+  init:  function(command) {
+    var options = command.input;
     if (options.interactive) {
       this.getOptions(options, this.action.bind(this));
     } else {
@@ -97,6 +98,8 @@ var AddPage = _.extend({}, Command, {
 
     var start = new Date();
 
+    staticx.init(options);
+
     staticx.addPage(options, function(err, page) {
 
       if (err) exit(1, err);
@@ -111,55 +114,41 @@ var AddPage = _.extend({}, Command, {
   },
   getOptions: function(options, done) {
 
-    var config = {};
     var schema = staticx.models.Page.schema;
     var model = new staticx.models.Base();
 
-     /**
-      * Validate the destination path option.
-      * @param  {String} value  The destination option value.
-      * @return {Boolean}       The result of the validation checks.
-      */
-    function validateDestination(value) {
-
-      if (!schema.destination.conform(value)) {
-        return false;
-      }
-
-      // Check a config.json file exists in the destination path.
-      var configPath = path.join(path.resolve(value), 'config.json');
-      try {
-        require(configPath);
-        return true;
-      } catch(e) {
-        exit(1, 'Error: A valid config.json file does not exist at this path:', configPath);
-        throw e;
-      }
-    }
-
     /** Begin the prompts */
 
-    var destination = '';
+    prompt.override = options;
     prompt.message = 'Add page';
     prompt.start();
 
-    prompt.get([
-    _.extend({}, schema.destination, {
+    prompt.get([{
+      name: 'destination',
       description: 'Destination path',
-      conform: function(value) {
-        if (!validateDestination(value)) return false;
-        destination = value;
-        config = staticx.readers.site.config(value);
-        return true;
+      conform: function(destination) {
+        if (!schema.destination.conform(destination)) return false;
+        // Check a config.json file exists in the destination path.
+        var configPath = path.join(path.resolve(destination), 'config.json');
+        try {
+          require(configPath);
+          options.destination = destination;
+          return true;
+        } catch(e) {
+          exit(1, 'Error: A valid config.json file does not exist at this path:', configPath);
+        }
       }
-    }),
+    },
     _.extend({}, schema.parent, {
+      name: 'parent',
       description: 'Parent page',
-      conform: function(value) {
-        return schema.parent.conform(value, destination, config.fileExtension);
+      conform: function(parent) {
+        var config = staticx.readers.site.getConfig(options.destination);
+        return schema.parent.conform(parent, options.destination, config.fileExtension);
       }
     }),
     _.extend({}, schema.title, {
+      name: 'title',
       description: 'Page title',
     }), {
       name: 'date',
@@ -195,8 +184,8 @@ var Create = _.extend({}, Command, {
    * Run the create action.
    * @param  {object} options The options object.
    */
-  action: function(options) {
-
+  action: function(command) {
+    var options = command.input;
     var start = new Date();
 
     staticx.create(options, function(err) {
