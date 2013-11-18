@@ -48,12 +48,11 @@
     "async": "~0.2.9",
     "speakingurl": "~0.2.21",
     "dimsum": "~0.1.8",
-    "commander": "~2.0.0",
     "colors": "~0.6.2",
     "prompt": "~0.2.11",
     "globalize": "~0.1.1",
-    "schema-validator": "~3.2.1",
     "glob": "~3.2.6",
-    "revalidator": "~0.1.5"
+    "revalidator": "~0.1.5",
+    "commander": "https://github.com/badsyntax/commander.js/tarball/master"
   }
 }
