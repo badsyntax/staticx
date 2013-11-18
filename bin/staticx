@@ -7,239 +7,16 @@
  * Copyright (c) 2013 Richard Willis
  * Licensed under the MIT license.
  */
-
 'use strict';
 
 /**
  * Load dependencies.
  */
-var staticx = require('../lib/staticx');
 var program = require('commander');
-var globalize = require('globalize');
-var colors = require('colors');
-var path = require('path');
-var prompt = require('prompt');
-var fs = require('fs');
 var _ = require('lodash');
-
-/**
- * Add colors to a string.
- * @param  {integer}  code      The exit code.
- * @param  {boolean}  substr    Is this a substitution string? (eg: 'Example %s')
- * @param  {string}   message   The message string to colorize.
- * @param  {integer}  index     The current array index.
- * @return {string}             The colorized string.
- */
-function colorize(code, substr, message, index) {
-  return !substr || index === 0 ? message[[
-    'info',
-    'error'
-  ][code]] : message;
-}
-
-/**
- * Show a colorized log message and exit the process.
- * @param  {integer}  code      The exit code.
- * @param  {string}   message   The log message.
- */
-function exit(code, message) {
-
-  var args = [].slice.call(arguments, 1)
-    .map(colorize.bind(null, code, /\%[sd]/.test(arguments[1])));
-
-  console.log.apply(console, args);
-  process.exit(code);
-}
-
-/**
- * Our base command object.
- */
-var Command = {
-  /**
-   * Start the command.
-   * @param  {object} options Command options.
-   */
-  init:  function(command) {
-    var options = command.input;
-    if (options.interactive) {
-      this.getOptions(options, this.action.bind(this));
-    } else {
-      this.action(options);
-    }
-  },
-};
-
-/**
- * Add page command
- */
-var AddPage = _.extend({}, Command, {
-  action: function(options) {
-    if (!options.interactive && !options.content) {
-      process.stdin.resume();
-      process.stdin.setEncoding('utf8');
-      process.stdin.on('data', function(data) {
-        options.content = data;
-        this.run(options);
-      }.bind(this));
-    } else {
-      this.run(options);
-    }
-  },
-  run: function(options) {
-
-    // Update the option defaults.
-    var date = ((!options.date || options.date === 'now') ? new Date() : globalize.parseDate(options.date));
-    var destination = options.destination || process.cwd();
-
-    _.merge(options, {
-      date: date.toISOString(),
-      destination: destination
-    });
-
-    var start = new Date();
-
-    staticx.init(options);
-
-    staticx.addPage(options, function(err, page) {
-
-      if (err) exit(1, err);
-
-      var msg = [
-        'Successfully created a new page at: %s',
-        'Completed in %dms'.data
-      ].join('\n');
-
-      exit(0, msg, path.resolve(page.filePath), new Date() - start);
-    });
-  },
-  getOptions: function(options, done) {
-
-    var schema = staticx.models.Page.schema;
-    var model = new staticx.models.Base();
-
-    /** Begin the prompts */
-
-    prompt.override = options;
-    prompt.message = 'Add page';
-    prompt.start();
-
-    prompt.get([{
-      name: 'destination',
-      description: 'Destination path',
-      conform: function(destination) {
-        if (!schema.destination.conform(destination)) return false;
-        // Check a config.json file exists in the destination path.
-        var configPath = path.join(path.resolve(destination), 'config.json');
-        try {
-          require(configPath);
-          options.destination = destination;
-          return true;
-        } catch(e) {
-          exit(1, 'Error: A valid config.json file does not exist at this path:', configPath);
-        }
-      }
-    },
-    _.extend({}, schema.parent, {
-      name: 'parent',
-      description: 'Parent page',
-      conform: function(parent) {
-        var config = staticx.readers.site.getConfig(options.destination);
-        return schema.parent.conform(parent, options.destination, config.fileExtension);
-      }
-    }),
-    _.extend({}, schema.title, {
-      name: 'title',
-      description: 'Page title',
-    }), {
-      name: 'date',
-      description: 'Page date',
-      type: 'string',
-      required: true,
-      default: 'now',
-      conform: function(value) {
-        return (value === 'now' || (globalize.parseDate(value) instanceof Date));
-      }
-    }, {
-      name: 'tags',
-      description: 'Page tags',
-      type: 'string',
-      required: false
-    }, {
-      name: 'content',
-      description: 'Page content',
-      type: 'string',
-      required: false
-    }], function (err, result) {
-      if (err) exit(1, err);
-      done(_.merge(options, result));
-    });
-  }
-});
-
-/**
- * Create command object.
- */
-var Create = _.extend({}, Command, {
-  /**
-   * Run the create action.
-   * @param  {object} options The options object.
-   */
-  action: function(command) {
-    var options = command.input;
-    var start = new Date();
-
-    staticx.create(options, function(err) {
-      if (err) exit(1, err);
-
-      var msg = [
-        'Successfully created a new site at: %s',
-        'Completed in %dms'.data
-      ].join('\n');
-
-      exit(0, msg, path.resolve(options.destination), new Date() - start);
-    });
-  },
-  /**
-   * Prompt the user for various options.
-   * @param  {Function} done The callback function to run once all options have
-   * been gathered.
-   */
-  getOptions: function(done) {
-    prompt.message = 'Create';
-    prompt.start();
-    prompt.get([{
-      name: 'destination',
-      description: 'Destination path',
-      type: 'string',
-      required: true,
-      message: 'Path does not exist',
-      conform: function(value) {
-        return fs.existsSync(value);
-      }
-    }, {
-      name: 'posts',
-      description: 'Number of posts',
-      type: 'string',
-      pattern: /^\w+$/,
-      default: '0',
-      required: true
-    }, {
-      name: 'clean',
-      description: 'Clean the directory first? (y/n)',
-      type: 'string',
-      pattern: /^[yn]$/i,
-      message: 'Please enter either \'y\' or \'n\'',
-      default: 'n',
-      required: true,
-      before: function(value) {
-        return value.toLowerCase() === 'y';
-      }
-    }], function (err, result) {
-      if (err) exit(1, err);
-      done(result);
-    });
-  }
-});
+var staticx = require('../lib/staticx');
+var AddPage = require('./commands/addpage');
+var Create = require('./commands/create');
 
 /**
  * The CLI object. This object will set the CLI environment and set the
@@ -249,16 +26,8 @@ var Create = _.extend({}, Command, {
 var CLI = {
   init: function() {
     program.version(staticx.pkg.version);
-    this.setColors();
     this.setCommands();
     program.parse(process.argv);
-  },
-  setColors: function() {
-    colors.setTheme({
-      error: 'red',
-      info: 'green',
-      data: 'grey'
-    });
   },
   setCommands: function() {
 
