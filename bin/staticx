@@ -9,48 +9,4 @@
  */
 'use strict';
 
-/**
- * Load dependencies.
- */
-var program = require('commander');
-var _ = require('lodash');
-var staticx = require('../lib/staticx');
-var AddPage = require('./commands/addpage');
-var Create = require('./commands/create');
-
-/**
- * The CLI object. This object will set the CLI environment and set the
- * commands which can be run from the CLI.
- * @type {Object}
- */
-var CLI = {
-  init: function() {
-    program.version(staticx.pkg.version);
-    this.setCommands();
-    program.parse(process.argv);
-  },
-  setCommands: function() {
-
-    program
-    .command('create')
-    .description('create a new site')
-    .option('--destination <destination>', 'destination path')
-    .option('--posts <posts>', 'number of dummy blog posts to generate', parseInt)
-    .option('--clean', 'clean the destination folder before creating')
-    .option('-i, --interactive', 'use prompts to set the options')
-    .action(Create.init.bind(Create));
-
-    program
-    .command('addpage')
-    .description('add a new page')
-    .option('--destination <destination>', 'destination path')
-    .option('--title <title>', 'page title')
-    .option('--parent <parent>', 'parent page')
-    .option('--date <date>', 'page date')
-    .option('--tags <tags>', 'page tags')
-    .option('-i, --interactive', 'use prompts to set the options')
-    .action(AddPage.init.bind(AddPage));
-  }
-};
-
-CLI.init();
+require('./cli').init();
