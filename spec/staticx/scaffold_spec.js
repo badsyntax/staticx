@@ -1,8 +1,16 @@
+/*
+ * staticx
+ * https://github.com/badsyntax/staticx
+ *
+ * Copyright (c) 2013 Richard Willis
+ * Licensed under the MIT license.
+ */
 'use strict';
 
-var staticx = require('../../lib/staticx.js');
+var staticx = require('../../lib/staticx');
 var fs = require('fs-extra');
 var async = require('async');
+var _ = require('lodash');
 
 describe('Scaffolding', function() {
 
@@ -81,7 +89,7 @@ describe('Scaffolding', function() {
       // Expose the created posts so we can use them in other tests.
       createdPosts = posts;
       // Here we check there's actually some content in the generated files...
-      async.series(posts.map(checkPostExists), done);
+      async.parallel(posts.map(checkPostExists), done);
     }
 
     scaffold.createPosts({
@@ -110,10 +118,29 @@ describe('Scaffolding', function() {
       clean: 'y'
     };
 
+    spyOn(staticx.scaffold, 'copy').andCallThrough();
+    spyOn(staticx.scaffold, 'createPosts').andCallThrough();
+    spyOn(staticx.scaffold, 'clean').andCallThrough();
+
     fs.mkdir(options.destination, function(err) {
       if (err) return done(err);
       staticx.create(options, function(err) {
         if (err) return done(err);
+        // Check that scaffold.copy was called.
+        expect(staticx.scaffold.copy).toHaveBeenCalled();
+        expect(staticx.scaffold.copy.mostRecentCall.args[0]).toEqual('lib/skeleton');
+        expect(staticx.scaffold.copy.mostRecentCall.args[1]).toEqual(options.destination);
+        // Check that scaffold.createPosts was called.
+        expect(staticx.scaffold.createPosts).toHaveBeenCalled();
+        expect(staticx.scaffold.createPosts.mostRecentCall.args[0]).toEqual(
+          _.extend({}, options, {
+            destination: 'spec/fixtures/tmp/create/_pages/blog',
+            source : 'lib/skeleton'
+          })
+        );
+        // Check that scaffold.clean was called.
+        expect(staticx.scaffold.clean).toHaveBeenCalled();
+        // Remove tmp dir.
         fs.remove(options.destination, done);
       });
     });
