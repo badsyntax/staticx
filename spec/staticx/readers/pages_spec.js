@@ -6,25 +6,18 @@ describe('Reading pages', function() {
 
   var reader = staticx.readers.pages;
 
-  it('Should read and parse page files', function() {
+  it('Should read and parse page files', function(done) {
 
     var parsed;
     var dir = 'spec/fixtures/site';
 
     reader.read(dir, function(err, obj) {
-      expect(err).toBe(null);
-      parsed = obj;
-    });
-
-    waitsFor(function() {
-      return parsed !== undefined;
-    }, 'Parsing took too long', 1000);
-
-    runs(function(){
-      expect(parsed).not.toBe(undefined);
-      expect(parsed.length).toBe(3);
-      expect(parsed[0].title).toBe('Site Blog');
-      expect(typeof parsed[0].schema).toBe('object');
+      if (err) return done(err);
+      expect(obj).not.toBe(undefined);
+      expect(obj.length).toBe(3);
+      expect(obj[0].title).toBe('Site Blog');
+      expect(typeof obj[0].schema).toBe('object');
+      done();
     });
   });
 });

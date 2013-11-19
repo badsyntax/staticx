@@ -36,32 +36,22 @@ describe('Page Model', function() {
     });
   });
 
-  it('Save the page data to file', function() {
-
-    var complete = false;
-
+  it('Save the page data to file', function(done) {
     model.save(function(err, data) {
-      if (err) throw err;
+      if (err) return done(err);
       expect(data).toBe(model);
       markdownParser.parseFile(model.filePath, function(err, data) {
-        expect(err).toBe(null);
-        complete = data;
+        if (err) return done(err);
+        expect(data.metadata.title).toBe('Example title');
+        expect(data.markdown).toBe('*This is some test content.*');
+        done();
       });
-    });
-
-    waitsFor(function() {
-      return complete;
-    }, 'Saving page model took too long', 2000);
-
-    runs(function() {
-      expect(complete.metadata.title).toBe('Example title');
-      expect(complete.markdown).toBe('*This is some test content.*');
     });
   });
 
   it('Removes the page file', function(done) {
     model.delete(function(err) {
-      expect(err).toBe(null);
+      if (err) return done(err);
       fs.exists(model.filePath, function(exists) {
         done(!exists ? null : 'Page still exists on filesystem');
       });
@@ -86,8 +76,7 @@ describe('Page Model', function() {
       title: 'test hello',
       date: new Date(),
     }).save(function(err, parentModel) {
-      expect(err).toBe(null);
-
+      if (err) return done(err);
       // Check the valid parent page passes validation.
       var model2 = new TestModel({
         title: 'test',
@@ -106,7 +95,7 @@ describe('Page Model', function() {
       title: 'first level',
       date: new Date(),
     }).save(function(err, firstModel) {
-      expect(err).toBe(null);
+      if (err) return done(err);
 
       var parent = path.basename(firstModel.filePath, '.' + firstModel.fileExtension);
 
@@ -116,7 +105,7 @@ describe('Page Model', function() {
         date: new Date(),
         parent: parent
       }).save(function(err, secondModel) {
-        expect(err).toBe(null);
+        if (err) return done(err);
 
         var parent = [
           secondModel.parent || '',
@@ -130,7 +119,7 @@ describe('Page Model', function() {
         });
 
         page.save(function(err) {
-          expect(err).toBe(null);
+          if (err) return done(err);
           fs.exists(path.join(secondModel.destination, '_pages', parent), function(exists) {
             if (!exists) return done('Parent page directory does not exist');
             fs.exists(page.filePath, function(exists) {
@@ -140,7 +129,7 @@ describe('Page Model', function() {
                 secondModel.delete.bind(secondModel),
                 page.delete.bind(page)
               ], function(err) {
-                expect(err).toBe(null);
+                if (err) return done(err);
 
                 /** TODO */
                 // We should check that empty directories are removed.

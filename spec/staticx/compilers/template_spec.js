@@ -7,43 +7,27 @@ describe('Compiling templates', function() {
 
   var compiler = staticx.compilers.template;
 
-  it('Should compile the template from a string of text', function() {
+  it('Should compile the template from a string of text', function(done) {
 
     var template = '<h1>{{title}}</h1>';
     var data = { title: 'test' };
-    var compiled;
 
-    compiler.compile(template, data, function(err, data) {
-      expect(err).toBe(null);
-      compiled = data;
-    });
-
-    waitsFor(function() {
-      return compiled !== undefined;
-    }, 'Compilation took too long', 5000);
-
-    runs(function () {
-      expect(compiled.trim()).toBe('<h1>test</h1>');
+    compiler.compile(template, data, function(err, result) {
+      if (err) return done(err);
+      expect(result.trim()).toBe('<h1>test</h1>');
+      done();
     });
   });
 
-  it('Should compile the template from a file path', function() {
+  it('Should compile the template from a file path', function(done) {
 
     var path = 'spec/fixtures/template.html';
     var data = { title: 'test' };
-    var compiled;
 
-    compiler.compilePath(path, data, function(err, data) {
-      expect(err).toBe(null);
-      compiled = data;
-    });
-
-    waitsFor(function() {
-      return compiled !== undefined;
-    }, 'Compilation took too long', 5000);
-
-    runs(function () {
-      expect(compiled.trim()).toBe('<h1>test</h1>');
+    compiler.compilePath(path, data, function(err, result) {
+      if (err) return done(err);
+      expect(result.trim()).toBe('<h1>test</h1>');
+      done();
     });
   });
 });
