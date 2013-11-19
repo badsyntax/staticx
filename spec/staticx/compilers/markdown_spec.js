@@ -26,22 +26,14 @@ describe('Compiling markdown', function() {
     });
   });
 
-  it('Should compile markdown from a file path.', function() {
+  it('Should compile markdown from a file path.', function(done) {
 
     var path = 'spec/fixtures/markdown.md';
-    var compiled;
 
     compiler.compilePath(path, function(err, data) {
-      expect(err).toBe(null);
-      compiled = data;
-    });
-
-    waitsFor(function() {
-      return compiled !== undefined;
-    }, 'Compilation took too long', 5000);
-
-    runs(function () {
-      expect(compiled.trim()).toBe('<p>some <em>text</em> here</p>');
+      if (err) return done(err);
+      expect(data.trim()).toBe('<p>some <em>text</em> here</p>');
+      done();
     });
   });
 });

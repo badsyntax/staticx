@@ -27,7 +27,7 @@ describe('Scaffolding', function() {
         staticx.scaffold.clean('spec/fixtures/tmp/tmpclean', function() {
           expect(fs.existsSync('spec/fixtures/tmp/tmpclean')).toBe(true);
           expect(fs.existsSync('spec/fixtures/tmp/tmpclean/file')).toBe(false);
-          fs.rmdir('spec/fixtures/tmp/tmpclean', done);
+          fs.remove('spec/fixtures/tmp/tmpclean', done);
         });
       });
     });
@@ -39,11 +39,17 @@ describe('Scaffolding', function() {
     var source = 'skeleton';
     var dest = 'spec/fixtures/tmp/skeleton';
 
-    scaffold.copy(source, dest, function(err) {
+    fs.mkdir(dest, function(err) {
       expect(err).toBe(null);
-      fs.exists(dest, function (exists) {
-        if (!exists) return done('The destination folder does not exists: ' + dest);
-        scaffold.clean(dest, done);
+      scaffold.copy(source, dest, function(err) {
+        expect(err).toBe(null);
+        fs.exists(dest, function (exists) {
+          if (!exists) return done('The destination folder does not exists: ' + dest);
+          scaffold.clean(dest, function(err) {
+            expect(err).toBe(null);
+            fs.remove(dest, done);
+          });
+        });
       });
     });
   });
@@ -104,9 +110,12 @@ describe('Scaffolding', function() {
       clean: 'y'
     };
 
-    staticx.create(options, function(err) {
-      expect(err).toBe(null);
-      done(null);
+    fs.mkdir(options.destination, function(err) {
+      if (err) return done(err);
+      staticx.create(options, function(err) {
+        if (err) return done(err);
+        fs.remove(options.destination, done);
+      });
     });
   });
 });
