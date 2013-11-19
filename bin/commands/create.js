@@ -17,7 +17,7 @@ module.exports = _.extend({}, Command, {
   action: function(options) {
     var start = new Date();
 
-    options.source = '../skeleton';
+    options.source = '../lib/skeleton';
 
     staticx.create(options, function(err) {
       if (err) util.exit(1, err);

@@ -9,7 +9,7 @@ describe('Reading the site', function() {
   it('Should read and parse all site related data on the filesystem', function(done) {
 
     var parsed;
-    var dir = 'skeleton';
+    var dir = 'lib/skeleton';
 
     reader.read(dir, function(err, obj) {
       if (err) return done(err);

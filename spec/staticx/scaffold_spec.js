@@ -36,7 +36,7 @@ describe('Scaffolding', function() {
   it('Should copy the skeleton files to a new directory', function(done){
 
     var scaffold = staticx.scaffold;
-    var source = 'skeleton';
+    var source = 'lib/skeleton';
     var dest = 'spec/fixtures/tmp/skeleton';
 
     fs.mkdir(dest, function(err) {
