@@ -14,6 +14,13 @@ staticx.awesome(); // "awesome"
 ## Documentation
 _(Coming soon)_
 
+## Conventions
+
+### Naming
+
+Modules (singletons) should be lower camel-case, like so: `myModule`
+Constructors (classes) should be upper camel-case, like so: `MyClass`
+
 ## Examples
 _(Coming soon)_
 
@@ -24,5 +31,5 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 _(Nothing yet)_
 
 ## License
-Copyright (c) 2013 Richard Willis  
+Copyright (c) 2013 Richard Willis
 Licensed under the MIT license.

@@ -3,7 +3,7 @@
 var fs = require('fs-extra');
 var dateFormat = require('dateformat');
 var staticx = require('../../../lib/staticx.js');
-var ScaffoldPage = require('../../../lib/staticx/models/page/scaffold');
+var ScaffoldPage = require('../../../lib/staticx/models/Page/Scaffold');
 
 describe('Scaffold page', function() {
 
