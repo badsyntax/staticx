@@ -1,9 +1,16 @@
+/*
+ * staticx
+ * https://github.com/badsyntax/staticx
+ *
+ * Copyright (c) 2013 Richard Willis
+ * Licensed under the MIT license.
+ */
 'use strict';
 
 var fs = require('fs');
 var path = require('path');
 var async = require('async');
-var staticx = require('../../../lib/staticx.js');
+var staticx = require('../../../lib/staticx');
 var Globalize = require('globalize');
 var PageModel = staticx.models.Page;
 var markdownParser = staticx.parsers.markdown;

@@ -1,3 +1,10 @@
+/*
+ * staticx
+ * https://github.com/badsyntax/staticx
+ *
+ * Copyright (c) 2013 Richard Willis
+ * Licensed under the MIT license.
+ */
 'use strict';
 
 var staticx = require('../../../lib/staticx');

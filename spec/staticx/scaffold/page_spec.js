@@ -1,8 +1,15 @@
+/*
+ * staticx
+ * https://github.com/badsyntax/staticx
+ *
+ * Copyright (c) 2013 Richard Willis
+ * Licensed under the MIT license.
+ */
 'use strict';
 
 var fs = require('fs-extra');
 var dateFormat = require('dateformat');
-var staticx = require('../../../lib/staticx.js');
+var staticx = require('../../../lib/staticx');
 var ScaffoldPage = require('../../../lib/staticx/models/Page/Scaffold');
 
 describe('Scaffold page', function() {
