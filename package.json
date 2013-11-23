@@ -52,7 +52,7 @@
     "globalize": "~0.1.1",
     "glob": "~3.2.6",
     "revalidator": "~0.1.5",
-    "commander": "https://github.com/badsyntax/commander.js/tarball/master",
-    "prompt": "https://github.com/badsyntax/prompt/tarball/master"
+    "prompt": "https://github.com/badsyntax/prompt/tarball/master",
+    "commander": "~2.0.0"
   }
 }

@@ -3,7 +3,8 @@
  */
 module.exports = {
   init:  function(command) {
-    var options = command.input;
+    // var options = command.input;
+    var options = command;
     if (options.interactive) {
       this.getOptions(options, this.action.bind(this));
     } else {
