@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /*
  * staticx
  * https://github.com/badsyntax/staticx
@@ -14,11 +12,15 @@
  */
 var program = require('commander');
 var pkg = require('../package.json');
+
+/**
+ * Load Commands.
+ */
 var AddPage = require('./commands/addpage');
 var Create = require('./commands/create');
 
 /**
- * Init the CLI. Set the commands and options.
+ * Set the commands and options, and process the arguments.
  */
 exports.init = function() {
 
