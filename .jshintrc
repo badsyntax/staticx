@@ -16,6 +16,7 @@
     "runs": false,
     "waitsFor": false,
     "it": false,
-    "describe": false
+    "describe": false,
+    "spyOn": false
   }
 }
