@@ -18,9 +18,11 @@ describe('Reading pages', function() {
 
     reader.read(dir, function(err, obj) {
       if (err) return done(err);
+
       expect(obj).not.toBe(undefined);
       expect(obj.length).toBe(3);
       expect(obj[0].title).toBe('Site Blog');
+      expect(obj[0].fileName).toBe('blog.md');
       expect(typeof obj[0].schema).toBe('object');
       done();
     });
