@@ -65,7 +65,6 @@ describe('Scaffolding', function() {
 
   it('Should create posts in markdown format', function(done) {
 
-
     function checkPostExists(page) {
       return function(next) {
         fs.exists(page.filePath, function(exists) {
@@ -113,34 +112,32 @@ describe('Scaffolding', function() {
     var options = {
       destination: 'spec/fixtures/tmp/create',
       posts: '10',
-      clean: 'y'
+      clean: 'y',
+      makeParentDirs: true
     };
 
     spyOn(scaffold, 'copy').andCallThrough();
     spyOn(scaffold, 'createPosts').andCallThrough();
     spyOn(scaffold, 'clean').andCallThrough();
 
-    fs.mkdir(options.destination, function(err) {
+    scaffold.create(options, function(err) {
       if (err) return done(err);
-      scaffold.create(options, function(err) {
-        if (err) return done(err);
-        // Check that scaffold.copy was called.
-        expect(scaffold.copy).toHaveBeenCalled();
-        expect(scaffold.copy.mostRecentCall.args[0]).toEqual('lib/skeleton');
-        expect(scaffold.copy.mostRecentCall.args[1]).toEqual(options.destination);
-        // Check that scaffold.createPosts was called.
-        expect(scaffold.createPosts).toHaveBeenCalled();
-        expect(scaffold.createPosts.mostRecentCall.args[0]).toEqual(
-          _.extend({}, options, {
-            destination: 'spec/fixtures/tmp/create/_pages/blog',
-            source : 'lib/skeleton'
-          })
-        );
-        // Check that scaffold.clean was called.
-        expect(scaffold.clean).toHaveBeenCalled();
-        // Remove tmp dir.
-        fs.remove(options.destination, done);
-      });
+      // Check that scaffold.copy was called.
+      expect(scaffold.copy).toHaveBeenCalled();
+      expect(scaffold.copy.mostRecentCall.args[0]).toEqual('lib/skeleton');
+      expect(scaffold.copy.mostRecentCall.args[1]).toEqual(options.destination);
+      // Check that scaffold.createPosts was called.
+      expect(scaffold.createPosts).toHaveBeenCalled();
+      expect(scaffold.createPosts.mostRecentCall.args[0]).toEqual(
+        _.extend({}, options, {
+          destination: 'spec/fixtures/tmp/create/_pages/blog',
+          source : 'lib/skeleton'
+        })
+      );
+      // Check that scaffold.clean was called.
+      expect(scaffold.clean).toHaveBeenCalled();
+      // Remove tmp dir.
+      fs.remove(options.destination, done);
     });
   });
 });
