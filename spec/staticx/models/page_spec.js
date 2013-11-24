@@ -21,7 +21,7 @@ require('util').inherits(TestModel, PageModel);
 
 describe('Page Model', function() {
 
-  var date = new Date('2013', '10', '3');
+  var date = new Date('2013', '10', '3').toISOString();
 
   var model = new TestModel({
     title: 'Example title',
@@ -37,7 +37,7 @@ describe('Page Model', function() {
       expect(model.slug).toBe('example-title');
       expect(model.url).toBe('example-title.html');
       expect(model.filePath).toBe('spec/fixtures/tmp/_pages/example-title.md');
-      expect(model.date.getTime()).toBe(date.getTime());
+      expect(new Date(model.date).getTime()).toBe(new Date(date).getTime());
     });
   });
 
@@ -79,7 +79,7 @@ describe('Page Model', function() {
     // Create the parent page.
     new TestModel({
       title: 'test hello',
-      date: new Date(),
+      date: new Date().toISOString(),
     }).save(function(err, parentModel) {
       if (err) return done(err);
       // Check the valid parent page passes validation.
@@ -98,7 +98,7 @@ describe('Page Model', function() {
     // Create the first level page.
     new TestModel({
       title: 'first level',
-      date: new Date(),
+      date: new Date().toISOString(),
     }).save(function(err, firstModel) {
       if (err) return done(err);
 
@@ -107,7 +107,7 @@ describe('Page Model', function() {
       // Create the second level page.
       new TestModel({
         title: 'second level',
-        date: new Date(),
+        date: new Date().toISOString(),
         parent: parent
       }).save(function(err, secondModel) {
         if (err) return done(err);

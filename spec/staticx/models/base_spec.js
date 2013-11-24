@@ -50,7 +50,7 @@ describe('Base Model', function() {
 
   describe('Getting data', function() {
     it('Should return data for properties that match the schema', function() {
-      var date = new Date();
+      var date = new Date().toISOString();
       var title = 'test';
       var data = {
         foo: 'bar',
