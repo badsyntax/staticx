@@ -7,12 +7,10 @@
  */
 'use strict';
 
-var staticx = require('../../../lib/staticx');
+var compiler = require('../../../lib/staticx/compilers/template');
 var fs = require('fs-extra');
 
 describe('Compiling templates', function() {
-
-  var compiler = staticx.compilers.template;
 
   it('Should compile the template from a string of text', function(done) {
 

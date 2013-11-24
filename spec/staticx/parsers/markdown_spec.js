@@ -7,11 +7,9 @@
  */
 'use strict';
 
-var staticx = require('../../../lib/staticx');
+var markdown = require('../../../lib/staticx/parsers/markdown');
 
 describe('Parsing markdown', function() {
-
-  var markdown = staticx.parsers.markdown;
 
   function runTest(method, text, done, testHandler) {
     markdown[method](text, function(err, obj) {

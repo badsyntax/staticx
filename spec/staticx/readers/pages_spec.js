@@ -7,11 +7,9 @@
  */
 'use strict';
 
-var staticx = require('../../../lib/staticx');
+var reader = require('../../../lib/staticx/readers/pages');
 
 describe('Reading pages', function() {
-
-  var reader = staticx.readers.pages;
 
   it('Should read and parse page files', function(done) {
 

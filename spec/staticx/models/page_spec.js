@@ -10,10 +10,8 @@
 var fs = require('fs');
 var path = require('path');
 var async = require('async');
-var staticx = require('../../../lib/staticx');
-var Globalize = require('globalize');
-var PageModel = staticx.models.Page;
-var markdownParser = staticx.parsers.markdown;
+var PageModel = require('../../../lib/staticx/models/Page');
+var markdownParser = require('../../../lib/staticx/parsers/markdown');
 
 var TestModel = function() {
   this.destination = 'spec/fixtures/tmp';

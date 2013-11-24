@@ -7,12 +7,10 @@
  */
 'use strict';
 
-var staticx = require('../../../lib/staticx');
+var compiler = require('../../../lib/staticx/compilers/markdown');
 var fs = require('fs-extra');
 
 describe('Compiling markdown', function() {
-
-  var compiler = staticx.compilers.markdown;
 
   it('Should compile markdown from a string of text.', function(done) {
 

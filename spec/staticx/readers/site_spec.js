@@ -7,11 +7,9 @@
  */
 'use strict';
 
-var staticx = require('../../../lib/staticx');
+var reader = require('../../../lib/staticx/readers/site');
 
 describe('Reading the site', function() {
-
-  var reader = staticx.readers.site;
 
   it('Should read and parse all site related data on the filesystem', function(done) {
 

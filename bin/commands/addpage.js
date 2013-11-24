@@ -3,6 +3,8 @@ var path = require('path');
 var _ = require('lodash');
 var prompt = require('prompt');
 var staticx = require('../../lib/staticx');
+var PageModel = require('../../lib/staticx/models/Page');
+var BaseModel = require('../../lib/staticx/models/Base');
 var validator = require('../../lib/staticx/validator');
 var Command = require('./command');
 var util = require('../util');
@@ -26,8 +28,6 @@ module.exports = _.extend({}, Command, {
   run: function(options) {
     var start = new Date();
 
-    staticx.init(options);
-
     staticx.addPage(options, function(err, page) {
 
       if (err) util.exit(1, err);
@@ -42,8 +42,8 @@ module.exports = _.extend({}, Command, {
   },
   getOptions: function(options, done) {
 
-    var schema = staticx.models.Page.schema;
-    var model = new staticx.models.Base();
+    var schema = PageModel.schema;
+    var model = new BaseModel();
 
     /** Begin the prompts */
 

@@ -7,8 +7,7 @@
  */
 'use strict';
 
-var staticx = require('../../../lib/staticx');
-var BaseModel = staticx.models.Base;
+var BaseModel = require('../../../lib/staticx/models/Base');
 
 var schema = {
   date: {
