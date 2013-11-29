@@ -9,4 +9,24 @@
  */
 'use strict';
 
-require('./cli').init();
+/**
+ * Load dependencies.
+ */
+var program = require('commander');
+var pkg = require('../package.json');
+
+/**
+ * Load Commands.
+ */
+var AddPageCommand = require('./commands/AddPage');
+var CreateCommand = require('./commands/Create');
+
+/**
+ * Create the commands and options and process the arguments.
+ */
+program.version(pkg.version);
+
+new CreateCommand();
+new AddPageCommand();
+
+program.parse(process.argv);
