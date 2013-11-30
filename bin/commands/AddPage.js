@@ -78,7 +78,7 @@ AddPageCommand.prototype.getOptions = function(options, done) {
       conform: function(destination) {
         if (!validator.fileExists(destination)) return false;
         options.destination = destination;
-        var configPath = path.join(path.resolve(destination), 'config.json');
+        var configPath = path.join(path.resolve(destination), '_source', 'config.json');
         if (!fs.existsSync(configPath)) {
           cliUtil.exit(1, 'Error: A valid config.json file does not exist at this path:', configPath);
         }
