@@ -110,6 +110,7 @@ describe('Scaffolding', function() {
   it('Should create a new skeleton site with optional blog posts', function(done) {
 
     var options = {
+      source: 'lib/skeleton',
       destination: 'spec/.tmp/create',
       posts: '10',
       clean: 'y',

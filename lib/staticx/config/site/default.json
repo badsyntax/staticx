@@ -2,5 +2,6 @@
     "title": "Example title",
     "author": "Firstname Surname",
     "fileExtension": "md",
+    "urlExtension": "html",
     "urlFormat": ":year-:month-:day-:slug.:urlExtension"
 }

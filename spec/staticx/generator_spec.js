@@ -8,6 +8,7 @@
 'use strict';
 
 var fs = require('fs-extra');
+var path = require('path');
 var async = require('async');
 var generator = require('../../lib/staticx/generator');
 var scaffold = require('../../lib/staticx/scaffold');
@@ -40,21 +41,25 @@ describe('Generator', function() {
 
     scaffold.create({
       destination: source,
+      source: 'lib/skeleton',
       posts: '20',
       clean: 'y',
       makeParentDirs: true
     }, function(err) {
       if (err) return done(err);
       generator.generate({
-        source: source,
-        makeParentDirs: true
+        source: source
       }, function(err, pages) {
         if (err) return done(err);
+        // Check that the pages have been read and parsed correctly.
         expect(typeof pages).toBe('object');
         expect(pages.length).not.toBe(undefined);
         expect(pages.length).toBeGreaterThan(0);
-        // Remove tmp dir.
-        fs.remove(source, done);
+        // Check the blog page has been generated in the correct directory.
+        fs.exists(path.join(source, 'blog.html'), function(exists) {
+          expect(exists).toBe(true);
+          fs.remove(source, done);
+        });
       });
     });
   });
