@@ -14,7 +14,7 @@ var PageModel = require('../../../lib/staticx/models/Page');
 var markdownParser = require('../../../lib/staticx/parsers/markdown');
 
 var TestModel = function() {
-  this.destination = 'spec/fixtures/tmp';
+  this.destination = 'spec/.tmp';
   PageModel.apply(this, arguments);
 };
 require('util').inherits(TestModel, PageModel);
@@ -36,7 +36,7 @@ describe('Page Model', function() {
       expect(model.fileExtension).toBe('md');
       expect(model.slug).toBe('example-title');
       expect(model.url).toBe('example-title.html');
-      expect(model.filePath).toBe('spec/fixtures/tmp/_pages/example-title.md');
+      expect(model.filePath).toBe('spec/.tmp/example-title.md');
       expect(new Date(model.date).getTime()).toBe(new Date(date).getTime());
     });
   });
@@ -90,6 +90,7 @@ describe('Page Model', function() {
       });
       var error2 = model2.validate();
       expect(error2.valid).toBe(true);
+      expect(error2.errors).toEqual([]);
       parentModel.delete(done);
     });
   });
@@ -125,7 +126,7 @@ describe('Page Model', function() {
 
         page.save(function(err) {
           if (err) return done(err);
-          fs.exists(path.join(secondModel.destination, '_pages', parent), function(exists) {
+          fs.exists(path.join(secondModel.destination, parent), function(exists) {
             if (!exists) return done('Parent page directory does not exist');
             fs.exists(page.filePath, function(exists) {
               if (!exists) return done('Page not saved to file');

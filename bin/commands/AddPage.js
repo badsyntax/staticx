@@ -5,6 +5,7 @@ var _ = require('lodash');
 var program = require('commander');
 var Command = require('./Command');
 var cliUtil = require('../util');
+var staticx = require('../../lib/staticx');
 
 /**
  * Add page command
@@ -27,10 +28,10 @@ var AddPageCommand = module.exports = function() {
 
 util.inherits(AddPageCommand, Command);
 
+/**
+ * Run the Add page command.
+ */
 AddPageCommand.prototype.run = function(options) {
-
-  var staticx = require('../../lib/staticx');
-
   this.getContentFromStdin(options, function() {
     var start = new Date();
     staticx.addPage(options, function(err, page) {

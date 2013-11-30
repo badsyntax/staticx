@@ -7,6 +7,7 @@
  */
 'use strict';
 
+var fs = require('fs-extra');
 var async = require('async');
 var generator = require('../../lib/staticx/generator');
 var scaffold = require('../../lib/staticx/scaffold');
@@ -31,28 +32,29 @@ describe('Generator', function() {
 
   it('Should read and parse the source site', function(done) {
 
-    var source = 'spec/fixtures/tmp/source';
-    var destination = 'spec/fixtures/tmp/destination';
+    // NOTE: there's a lot we're not testing here, like the existence of
+    // files on the filesystem, or if certain methods are called, because those
+    // types of tests are done within the various module specs.
 
-    var options = {
+    var source = 'spec/.tmp/source';
+
+    scaffold.create({
       destination: source,
       posts: '20',
       clean: 'y',
       makeParentDirs: true
-    };
-
-    scaffold.create(options, function(err) {
+    }, function(err) {
       if (err) return done(err);
       generator.generate({
         source: source,
-        destination: destination,
         makeParentDirs: true
-      }, function(err, obj) {
+      }, function(err, pages) {
         if (err) return done(err);
-        expect(typeof obj).toBe('object');
-        expect(obj.length).not.toBe(undefined);
-        expect(obj.length).toBeGreaterThan(0);
-        done(null);
+        expect(typeof pages).toBe('object');
+        expect(pages.length).not.toBe(undefined);
+        expect(pages.length).toBeGreaterThan(0);
+        // Remove tmp dir.
+        fs.remove(source, done);
       });
     });
   });

@@ -21,9 +21,11 @@ describe('Reading pages', function() {
 
       expect(obj).not.toBe(undefined);
       expect(obj.length).toBe(3);
-      expect(obj[0].title).toBe('Site Blog');
-      expect(obj[0].fileName).toBe('blog.md');
-      expect(typeof obj[0].schema).toBe('object');
+      if (obj.length) {
+        expect(obj[0].title).toBe('Site Blog');
+        expect(obj[0].fileName).toBe('blog.md');
+        expect(typeof obj[0].schema).toBe('object');
+      }
       done();
     });
   });

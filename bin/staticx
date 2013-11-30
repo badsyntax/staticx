@@ -22,7 +22,7 @@ var AddPageCommand = require('./commands/AddPage');
 var CreateCommand = require('./commands/Create');
 
 /**
- * Create the commands and options and process the arguments.
+ * Create the commands and process the arguments.
  */
 program.version(pkg.version);
 

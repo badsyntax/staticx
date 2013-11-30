@@ -15,11 +15,11 @@ var _ = require('lodash');
 describe('Scaffolding', function() {
 
   it('Should remove a directory', function(done){
-    fs.mkdir('spec/fixtures/tmp/remove',function(err) {
+    fs.mkdir('spec/.tmp/remove',function(err) {
       if (err) return done(err);
-      scaffold.remove('spec/fixtures/tmp/remove', function(err) {
+      scaffold.remove('spec/.tmp/remove', function(err) {
         if (err) return done(err);
-        fs.exists('spec/fixtures/tmp/remove', function (exists) {
+        fs.exists('spec/.tmp/remove', function (exists) {
           done(!exists ? null : 'Directory still exists');
         });
       });
@@ -27,15 +27,15 @@ describe('Scaffolding', function() {
   });
 
   it('Should clean a directory', function(done){
-    fs.mkdir('spec/fixtures/tmp/tmpclean', function(err) {
+    fs.mkdir('spec/.tmp/tmpclean', function(err) {
       if (err) return done(err);
-      fs.writeFile('spec/fixtures/tmp/tmpclean/file', 'Hello', function(err) {
+      fs.writeFile('spec/.tmp/tmpclean/file', 'Hello', function(err) {
         if (err) return done(err);
-        expect(fs.existsSync('spec/fixtures/tmp/tmpclean/file')).toBe(true);
-        scaffold.clean('spec/fixtures/tmp/tmpclean', function() {
-          expect(fs.existsSync('spec/fixtures/tmp/tmpclean')).toBe(true);
-          expect(fs.existsSync('spec/fixtures/tmp/tmpclean/file')).toBe(false);
-          fs.remove('spec/fixtures/tmp/tmpclean', done);
+        expect(fs.existsSync('spec/.tmp/tmpclean/file')).toBe(true);
+        scaffold.clean('spec/.tmp/tmpclean', function() {
+          expect(fs.existsSync('spec/.tmp/tmpclean')).toBe(true);
+          expect(fs.existsSync('spec/.tmp/tmpclean/file')).toBe(false);
+          fs.remove('spec/.tmp/tmpclean', done);
         });
       });
     });
@@ -44,7 +44,7 @@ describe('Scaffolding', function() {
   it('Should copy the skeleton files to a new directory', function(done){
 
     var source = 'lib/skeleton';
-    var dest = 'spec/fixtures/tmp/skeleton';
+    var dest = 'spec/.tmp/skeleton';
 
     fs.mkdir(dest, function(err) {
       if (err) return done(err);
@@ -90,7 +90,7 @@ describe('Scaffolding', function() {
     }
 
     scaffold.createPosts({
-      destination: 'spec/fixtures/tmp',
+      destination: 'spec/.tmp',
       posts: 7
     }, onCreatePosts);
   });
@@ -110,7 +110,7 @@ describe('Scaffolding', function() {
   it('Should create a new skeleton site with optional blog posts', function(done) {
 
     var options = {
-      destination: 'spec/fixtures/tmp/create',
+      destination: 'spec/.tmp/create',
       posts: '10',
       clean: 'y',
       makeParentDirs: true
@@ -130,7 +130,7 @@ describe('Scaffolding', function() {
       expect(scaffold.createPosts).toHaveBeenCalled();
       expect(scaffold.createPosts.mostRecentCall.args[0]).toEqual(
         _.extend({}, options, {
-          destination: 'spec/fixtures/tmp/create/_pages/blog',
+          destination: 'spec/.tmp/create/_source/_pages/blog',
           source : 'lib/skeleton'
         })
       );
