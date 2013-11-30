@@ -20,6 +20,7 @@ var pkg = require('../package.json');
  */
 var AddPageCommand = require('./commands/AddPage');
 var CreateCommand = require('./commands/Create');
+var GenerateCommand = require('./commands/Generate');
 
 /**
  * Create the commands and process the arguments.
@@ -28,5 +29,6 @@ program.version(pkg.version);
 
 new CreateCommand();
 new AddPageCommand();
+new GenerateCommand();
 
 program.parse(process.argv);

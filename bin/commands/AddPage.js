@@ -1,4 +1,4 @@
-var fs = require('fs');
+var fs = require('graceful-fs');
 var util = require('util');
 var path = require('path');
 var _ = require('lodash');
@@ -14,7 +14,7 @@ var AddPageCommand = module.exports = function() {
 
   program
   .command('addpage')
-  .description('add a new page')
+  .description('Add a page to a site.')
   .option('--destination <destination>', 'destination path')
   .option('--title <title>', 'page title')
   .option('--parent <parent>', 'parent page')
