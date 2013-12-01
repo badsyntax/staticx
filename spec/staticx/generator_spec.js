@@ -55,6 +55,7 @@ describe('Generator', function() {
         expect(typeof pages).toBe('object');
         expect(pages.length).not.toBe(undefined);
         expect(pages.length).toBeGreaterThan(0);
+        expect(!!pages[0].generatedFilePath).toBe(true);
         // Check the blog page has been generated in the correct directory.
         fs.exists(path.join(source, 'blog.html'), function(exists) {
           expect(exists).toBe(true);
