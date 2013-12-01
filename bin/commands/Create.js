@@ -7,7 +7,7 @@ var Command = require('./Command');
 var cliUtil = require('../util');
 
 /**
- * Create command object.
+ * Create command.
  */
 var CreateCommand = module.exports = function() {
 

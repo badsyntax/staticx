@@ -8,7 +8,7 @@ var cliUtil = require('../util');
 var staticx = require('../../lib/staticx');
 
 /**
- * Add page command
+ * Add page command.
  */
 var AddPageCommand = module.exports = function() {
 
@@ -76,12 +76,17 @@ AddPageCommand.prototype.getOptions = function(options, done) {
       name: 'destination',
       description: 'Destination path',
       conform: function(destination) {
+
+        // First we check if the destination path exists.
         if (!validator.fileExists(destination)) return false;
         options.destination = destination;
+
+        // Now we check a config file exists in the destination directory.
         var configPath = path.join(path.resolve(destination), '_source', 'config.json');
         if (!fs.existsSync(configPath)) {
           cliUtil.exit(1, 'Error: A valid config.json file does not exist at this path:', configPath);
         }
+
         return true;
       }
     }),

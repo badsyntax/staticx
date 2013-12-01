@@ -9,7 +9,7 @@ var Command = module.exports = function() {};
  */
 Command.prototype.init = function(options) {
   if (options.interactive) {
-    this.getOptions(options, this.run.bind(this));
+    this.getOptions(options, this.run);
   } else {
     this.run(options);
   }
