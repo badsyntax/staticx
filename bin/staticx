@@ -18,9 +18,10 @@ var pkg = require('../package.json');
 /**
  * Load Commands.
  */
-var AddPageCommand = require('./commands/AddPage');
-var CreateCommand = require('./commands/Create');
+var AddPageCommand  = require('./commands/AddPage');
+var CreateCommand   = require('./commands/Create');
 var GenerateCommand = require('./commands/Generate');
+var ServeCommand    = require('./commands/Serve');
 
 /**
  * Create the commands and process the arguments.
@@ -30,5 +31,6 @@ program.version(pkg.version);
 new CreateCommand();
 new AddPageCommand();
 new GenerateCommand();
+new ServeCommand();
 
 program.parse(process.argv);
