@@ -94,10 +94,12 @@ describe('Page Model', function() {
       expect(validate.errors[0].property).toBe('parent');
 
       // Create the parent page.
-      new TestModel({
+      var parentModel = new TestModel({
         title: 'test hello',
         date: new Date().toISOString(),
-      }).save(function(err, parentModel) {
+      });
+
+      parentModel.save(function(err) {
         if (err) return done(err);
         // Check the valid parent page passes validation.
         var model2 = new TestModel({
@@ -117,20 +119,24 @@ describe('Page Model', function() {
 
     it('Should save the page data to file when specifying the parent page', function(done) {
       // Create the first level page.
-      new TestModel({
+      var firstModel = new TestModel({
         title: 'first level',
         date: new Date().toISOString(),
-      }).save(function(err, firstModel) {
+      });
+
+      firstModel.save(function(err) {
         if (err) return done(err);
 
         var parent = path.basename(firstModel.filePath, '.' + firstModel.fileExtension);
 
         // Create the second level page.
-        new TestModel({
+        var secondModel = new TestModel({
           title: 'second level',
           date: new Date().toISOString(),
           parent: parent
-        }).save(function(err, secondModel) {
+        });
+
+        secondModel.save(function(err) {
           if (err) return done(err);
 
           var parent = [

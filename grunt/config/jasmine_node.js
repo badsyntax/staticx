@@ -2,5 +2,6 @@
 
 module.exports = {
   specNameMatcher: '_spec',
-  projectRoot: ''
+  projectRoot: '',
+  verbose: true
 };
