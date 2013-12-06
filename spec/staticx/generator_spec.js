@@ -33,34 +33,35 @@ describe('Generator', function() {
 
   it('Should read and parse the source site', function(done) {
 
-    // NOTE: there's a lot we're not testing here, like the existence of
-    // files on the filesystem, or if certain methods are called, because those
-    // types of tests are done within the various module specs.
-
     var source = 'spec/.tmp/source';
 
     scaffold.create({
       destination: source,
       source: 'lib/skeleton',
-      posts: '20',
+      posts: '1',
       clean: 'y',
       makeParentDirs: true
     }, function(err) {
-      done();
       if (err) return done(err);
       generator.generate({
         source: source
       }, function(err, pages) {
         if (err) return done(err);
+
         // Check that the pages have been read and parsed correctly.
         expect(typeof pages).toBe('object');
         expect(pages.length).not.toBe(undefined);
         expect(pages.length).toBeGreaterThan(0);
-        expect(!!pages[0].generatedFilePath).toBe(true);
+
         // Check the blog page has been generated in the correct directory.
-        fs.exists(path.join(source, 'blog.html'), function(exists) {
+        var blogPage = path.join(source, 'blog.html');
+        fs.exists(blogPage, function(exists) {
           expect(exists).toBe(true);
-          fs.remove(source, done);
+          fs.readFile(blogPage, 'utf8', function(err, data) {
+            if (err) return done(err);
+            expect(data.indexOf('<section class="page">')).not.toBe(-1);
+            done();
+          });
         });
       });
     });
