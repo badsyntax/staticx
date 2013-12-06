@@ -46,6 +46,7 @@ describe('Generator', function() {
       clean: 'y',
       makeParentDirs: true
     }, function(err) {
+      done();
       if (err) return done(err);
       generator.generate({
         source: source

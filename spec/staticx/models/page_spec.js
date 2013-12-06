@@ -11,6 +11,7 @@ var fs = require('fs');
 var path = require('path');
 var async = require('async');
 var PageModel = require('../../../lib/staticx/models/Page');
+var BaseModel = require('../../../lib/staticx/models/Base');
 var markdownParser = require('../../../lib/staticx/parsers/markdown');
 
 var TestModel = function() {
@@ -29,8 +30,37 @@ describe('Page Model', function() {
     date: date
   });
 
+  expect(model instanceof BaseModel).toBe(true);
+
   describe('Construction', function() {
     describe('Setting properties', function() {
+      it('Should error if the destination is not set', function() {
+        var model;
+        try {
+          model = new PageModel({
+            destination: null
+          });
+          expect(model.destination).toBe(null);
+        } catch(e) {
+          expect(e.toString().length).toBeGreaterThan(0);
+        }
+        try {
+          model = new PageModel({
+            destination: ''
+          });
+          expect(model.destination).toBe('');
+        } catch(e) {
+          expect(e.toString().length).toBeGreaterThan(0);
+        }
+        try {
+          model = new PageModel({
+            destination: false
+          });
+          expect(model.destination).toBe(false);
+        } catch(e) {
+          expect(e.toString().length).toBeGreaterThan(0);
+        }
+      });
       it('Should set default properties', function() {
         expect(model.urlExtension).toBe('html');
         expect(model.fileExtension).toBe('md');
@@ -43,7 +73,7 @@ describe('Page Model', function() {
         var model = new TestModel({
           title: 'Title',
           content: 'Content',
-          filePath: 'blog.md'
+          filePath: 'blog.md',
         });
         expect(model.url).toBe('blog.html');
         var model2 = new TestModel({
@@ -60,7 +90,6 @@ describe('Page Model', function() {
     it('Should save the page data to file', function(done) {
       model.save(function(err, data) {
         if (err) return done(err);
-        expect(data).toBe(model);
         markdownParser.parseFile(model.filePath, function(err, data) {
           if (err) return done(err);
           expect(data.metadata.title).toBe('Example title');

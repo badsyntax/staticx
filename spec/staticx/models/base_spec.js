@@ -24,6 +24,7 @@ var schema = {
 
 var TestModel = function() {
   this.setSchema(schema);
+  this.filePath = 'spec/.tmp/tmpPage';
   BaseModel.apply(this, arguments);
 };
 require('util').inherits(TestModel, BaseModel);
@@ -31,6 +32,15 @@ require('util').inherits(TestModel, BaseModel);
 describe('Base Model', function() {
 
   describe('Schema', function() {
+
+    it('Should error if the filePath has not been set', function() {
+      try {
+        new BaseModel();
+        expect(0).toBe(1);
+      } catch(e) {
+        expect(e.toString().length).toBeGreaterThan(0);
+      }
+    });
 
    it('Should set the schema and default properties', function() {
       var model = new TestModel();
@@ -42,9 +52,9 @@ describe('Base Model', function() {
 
     it('Should set properties with a data object', function() {
       var model = new TestModel({
-        foo: 'bar'
+        title: 'bar'
       });
-      expect(model.foo).toBe('bar');
+      expect(model.title).toBe('bar');
     });
   });
 
