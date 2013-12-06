@@ -53,7 +53,7 @@
     "glob": "~3.2.6",
     "revalidator": "~0.1.5",
     "prompt": "https://github.com/badsyntax/prompt/tarball/master",
-    "commander": "~2.0.0",
+    "commander": "~2.1.0",
     "graceful-fs": "~2.0.1",
     "connect": "~2.11.1"
   }
