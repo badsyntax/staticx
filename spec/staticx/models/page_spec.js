@@ -26,7 +26,7 @@ describe('Page Model', function() {
 
   var model = new TestModel({
     title: 'Example title',
-    content: '*This is some test content.*',
+    markdown: '*This is some test content.*',
     date: date
   });
 
@@ -202,6 +202,14 @@ describe('Page Model', function() {
           });
         });
       });
+    });
+  });
+
+  it('Should compile the markdown to html', function(done) {
+    model.compileContent(function(err) {
+      if (err) return done(err);
+      expect(model.content.length).toBeGreaterThan(0);
+      done();
     });
   });
 });
