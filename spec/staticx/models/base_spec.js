@@ -33,15 +33,6 @@ describe('Base Model', function() {
 
   describe('Schema', function() {
 
-    it('Should error if the filePath has not been set', function() {
-      try {
-        new BaseModel();
-        expect(0).toBe(1);
-      } catch(e) {
-        expect(e.toString().length).toBeGreaterThan(0);
-      }
-    });
-
    it('Should set the schema and default properties', function() {
       var model = new TestModel();
       expect(model.schema.date).toEqual(schema.date);
