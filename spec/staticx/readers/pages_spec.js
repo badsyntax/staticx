@@ -26,6 +26,17 @@ describe('Reading pages', function() {
         expect(obj[0].fileName).toBe('blog.md');
         expect(typeof obj[0].schema).toBe('object');
       }
+
+      var page = {};
+      obj.forEach(function(p) {
+        if (p.filePath === 'spec/fixtures/site/_source/_pages/blog/post.md') {
+          page = p;
+          return false;
+        }
+      });
+
+      expect(page.filePath).toBe('spec/fixtures/site/_source/_pages/blog/post.md');
+      expect(page.parent).toBe('blog');
       done();
     });
   });
