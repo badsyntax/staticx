@@ -60,7 +60,6 @@ describe('Generator', function() {
           expect(exists).toBe(true);
           fs.readFile(blogPage, 'utf8', function(err, data) {
             if (err) return done(err);
-            // console.log('DATA', data);
             expect(data.indexOf('<section class="page">')).not.toBe(-1);
             done();
           });
