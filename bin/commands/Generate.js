@@ -10,7 +10,6 @@ var cliUtil = require('../util');
  * Generate command.
  */
 var GenerateCommand = module.exports = function() {
-
   program
   .command('generate')
   .description('Generate a site.')

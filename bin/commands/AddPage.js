@@ -94,7 +94,8 @@ AddPageCommand.prototype.getOptions = function(options, done) {
       name: 'parent',
       description: 'Parent page',
       conform: function(parent, obj) {
-        return true;
+        var config = staticx.readers.site.getConfig(options.destination);
+        return schema.parent.conform(parent, options.destination, config.fileExtension);
       }
     }),
     _.extend({}, schema.title, {
