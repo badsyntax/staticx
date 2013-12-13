@@ -66,9 +66,6 @@ CreateCommand.prototype.getOptions = function(options, done) {
     type: 'string',
     required: true,
     message: 'Path does not exist',
-    conform: function(value) {
-      return fs.existsSync(value);
-    }
   }, {
     name: 'posts',
     description: 'Number of posts',

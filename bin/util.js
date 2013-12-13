@@ -3,7 +3,8 @@ var colors = require('colors');
 colors.setTheme({
   error: 'red',
   info: 'green',
-  data: 'grey'
+  data: 'grey',
+  warning: 'yellow'
 });
 
 /**
