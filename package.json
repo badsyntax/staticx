@@ -51,10 +51,10 @@
     "colors": "~0.6.2",
     "globalize": "~0.1.1",
     "glob": "~3.2.6",
-    "revalidator": "~0.1.5",
-    "prompt": "https://github.com/badsyntax/prompt/tarball/master",
+    "revalidator": "https://github.com/flatiron/revalidator/tarball/master",
     "commander": "~2.1.0",
     "graceful-fs": "~2.0.1",
-    "connect": "~2.11.1"
+    "connect": "~2.11.1",
+    "prompt": "~0.2.12"
   }
 }
