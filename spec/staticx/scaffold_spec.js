@@ -12,6 +12,9 @@ var fs = require('fs-extra');
 var async = require('async');
 var _ = require('lodash');
 
+var markdownParser = require('../../lib/staticx/parsers/markdown');
+
+
 describe('Scaffolding', function() {
 
   it('Should remove a directory', function(done){
@@ -74,6 +77,13 @@ describe('Scaffolding', function() {
             if (!data.toString().trim()) {
               next('No data in file create scaffold page file.');
             } else {
+               // console.log(model.filePath);
+              markdownParser.parseFile(page.filePath, function(err, data) {
+                if (err) return done(err);
+                expect(!!data.metadata.title).toBe(true);
+                expect(/<p>/.test(data.markdown.text)).toBe(false);
+                done();
+              });
               next(null);
             }
           });

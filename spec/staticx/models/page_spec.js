@@ -16,6 +16,7 @@ var markdownParser = require('../../../lib/staticx/parsers/markdown');
 
 var TestModel = function() {
   this.destination = 'spec/.tmp';
+  this.content = 'Content';
   PageModel.apply(this, arguments);
 };
 require('util').inherits(TestModel, PageModel);
@@ -30,7 +31,9 @@ describe('Page Model', function() {
     date: date
   });
 
-  expect(model instanceof BaseModel).toBe(true);
+  it('Should be an instance of the BaseModel', function() {
+    expect(model instanceof BaseModel).toBe(true);
+  });
 
   describe('Construction', function() {
     describe('Setting properties', function() {
@@ -72,13 +75,11 @@ describe('Page Model', function() {
       it('Should match the url and filePath properties', function() {
         var model = new TestModel({
           title: 'Title',
-          content: 'Content',
           filePath: 'blog.md',
         });
         expect(model.url).toBe('blog.html');
         var model2 = new TestModel({
           title: 'Title',
-          content: 'Content',
           url: 'blog'
         });
         expect(model.filePath).toBe('blog.md');
@@ -86,33 +87,10 @@ describe('Page Model', function() {
     });
   });
 
-  describe('Reading and writing to the filesystem', function() {
-    it('Should save the page data to file', function(done) {
-      model.save(function(err, data) {
-        if (err) return done(err);
-        markdownParser.parseFile(model.filePath, function(err, data) {
-          if (err) return done(err);
-          expect(data.metadata.title).toBe('Example title');
-          // FIXME
-          // expect(data.markdown).toBe('*This is some test content.*');
-          done();
-        });
-      });
-    });
-    it('Should remove the page file', function(done) {
-      model.delete(function(err) {
-        if (err) return done(err);
-        fs.exists(model.filePath, function(exists) {
-          done(!exists ? null : 'Page still exists on filesystem');
-        });
-      });
-    });
-  });
-
   describe('Data and schema validation', function() {
     it('Should validate the parent page correctly', function(done) {
 
-      // Check that an invalid parent page is validated.
+      //Check that an invalid parent page is validated.
       var model1 = new TestModel({
         title: 'test',
         date: new Date().toISOString(),
@@ -126,21 +104,41 @@ describe('Page Model', function() {
       // Create the parent page.
       var parentModel = new TestModel({
         title: 'test hello',
-        date: new Date().toISOString(),
+        date: new Date().toISOString()
       });
 
       parentModel.save(function(err) {
         if (err) return done(err);
+
         // Check the valid parent page passes validation.
         var model2 = new TestModel({
           title: 'test',
           date: new Date().toISOString(),
-          parent: path.basename(parentModel.filePath, '.' + parentModel.fileExtension)
+          parent: parentModel.name
         });
         var error2 = model2.validate();
         expect(error2.valid).toBe(true);
         expect(error2.errors).toEqual([]);
         parentModel.delete(done);
+      });
+    });
+  });
+
+  describe('Reading and writing to the filesystem', function() {
+    it('Should save the page data to file', function(done) {
+      model.save(function(err, data) {
+        if (err) return done(err);
+        fs.exists(model.filePath, function(exists) {
+          done(exists ? null : 'Does not exist on the filesystem');
+        });
+      });
+    });
+    it('Should remove the page file', function(done) {
+      model.delete(function(err) {
+        if (err) return done(err);
+        fs.exists(model.filePath, function(exists) {
+          done(!exists ? null : 'Page still exists on filesystem');
+        });
       });
     });
   });
