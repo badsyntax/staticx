@@ -77,7 +77,6 @@ describe('Scaffolding', function() {
             if (!data.toString().trim()) {
               next('No data in file create scaffold page file.');
             } else {
-               // console.log(model.filePath);
               markdownParser.parseFile(page.filePath, function(err, data) {
                 if (err) return done(err);
                 expect(!!data.metadata.title).toBe(true);
@@ -141,7 +140,7 @@ describe('Scaffolding', function() {
       expect(scaffold.createPosts).toHaveBeenCalled();
       expect(scaffold.createPosts.mostRecentCall.args[0]).toEqual(
         _.extend({}, options, {
-          destination: 'spec/.tmp/create/_source/_pages/blog',
+          destination: 'spec/.tmp/create/_source/pages/blog',
           source : 'lib/skeleton'
         })
       );

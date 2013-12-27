@@ -19,7 +19,7 @@ describe('ViewModel', function() {
 
   describe('Construction', function() {
 
-    var model = new ViewModel(null, null, {
+    var model = new ViewModel(null, null, null, {
       title: 'bar'
     });
 
@@ -42,7 +42,7 @@ describe('ViewModel', function() {
         expect(VM).toBe(null);
       });
       it('Should return a ViewModel instance', function() {
-        var PageViewModel = require(path.resolve(path.join(source, '_source', 'viewModels', 'page')))(ViewModel);
+        var PageViewModel = require(path.resolve(path.join(source, '_source', 'themes', 'default', 'viewModels', 'page')))(ViewModel);
         var VM = ViewModel.factory('page', source);
         expect(VM instanceof ViewModel).toBe(true);
         // Theme ViewModels return new Objects so we can do this instance check.

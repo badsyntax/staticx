@@ -29,13 +29,13 @@ describe('Reading pages', function() {
 
       var page = {};
       obj.forEach(function(p) {
-        if (p.filePath === 'spec/fixtures/site/_source/_pages/blog/post.md') {
+        if (p.filePath === 'spec/fixtures/site/_source/pages/blog/post.md') {
           page = p;
           return false;
         }
       });
 
-      expect(page.filePath).toBe('spec/fixtures/site/_source/_pages/blog/post.md');
+      expect(page.filePath).toBe('spec/fixtures/site/_source/pages/blog/post.md');
       expect(page.parent).toBe('blog');
       done();
     });

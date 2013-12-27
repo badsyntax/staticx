@@ -60,8 +60,8 @@ describe('Scaffold page', function() {
   it('Should generate a filepath to save the page data', function() {
     var page = new ScaffoldPage({
       date: new Date(2013,11,10),
-      destination: 'spec/.tmp/_pages'
+      destination: 'spec/.tmp/pages'
     });
-    expect(page.filePath).toBe('spec/.tmp/_pages/blog-page-for-tuesday-december-10th-2013.md');
+    expect(page.filePath).toBe('spec/.tmp/pages/blog-page-for-tuesday-december-10th-2013.md');
   });
 });
