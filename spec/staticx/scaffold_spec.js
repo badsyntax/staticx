@@ -132,11 +132,9 @@ describe('Scaffolding', function() {
 
     scaffold.create(options, function(err) {
       if (err) return done(err);
-      // Check that scaffold.copy was called.
       expect(scaffold.copy).toHaveBeenCalled();
       expect(scaffold.copy.mostRecentCall.args[0]).toEqual('lib/skeleton');
       expect(scaffold.copy.mostRecentCall.args[1]).toEqual(options.destination);
-      // Check that scaffold.createPosts was called.
       expect(scaffold.createPosts).toHaveBeenCalled();
       expect(scaffold.createPosts.mostRecentCall.args[0]).toEqual(
         _.extend({}, options, {
@@ -144,9 +142,7 @@ describe('Scaffolding', function() {
           source : 'lib/skeleton'
         })
       );
-      // Check that scaffold.clean was called.
       expect(scaffold.clean).toHaveBeenCalled();
-      // Remove tmp dir.
       fs.remove(options.destination, done);
     });
   });

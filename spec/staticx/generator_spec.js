@@ -17,17 +17,11 @@ describe('Generator', function() {
 
   it('Should validate the source and destination directories', function(done){
     generator.generate({
-      source: '.',
-      destination: 'notfound'
+      source: 'notfound',
+      destination: '.'
     }, function(err) {
       expect(err).not.toBe(null);
-      generator.generate({
-        source: 'notfound',
-        destination: '.'
-      }, function(err) {
-        expect(err).not.toBe(null);
-        done();
-      });
+      done();
     });
   });
 
@@ -50,8 +44,7 @@ describe('Generator', function() {
         if (err) return done(err);
 
         // Check that the pages have been read and parsed correctly.
-        expect(typeof pages).toBe('object');
-        expect(pages.length).not.toBe(undefined);
+        expect(pages instanceof Array).toBe(true);
         expect(pages.length).toBeGreaterThan(0);
 
         // Check the blog page has been generated in the correct directory.
