@@ -9,6 +9,7 @@ module.exports = {
     '*.json',
     'grunt/**/*.js',
     'lib/**/*.js',
+    '!**/_source/themes/**',
     'spec/**/*.js',
     'bin/*'
   ],
