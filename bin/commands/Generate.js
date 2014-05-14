@@ -32,11 +32,19 @@ GenerateCommand.prototype.run = function(options) {
   var staticx = require('../../lib/staticx');
 
   staticx.generate.on('theme.build', function(theme) {
-    console.log(util.format('Building theme (%s)...', theme).data);
+    console.log(util.format('* Building theme (%s)...', theme).data);
   });
 
-  staticx.generate.on('theme.assetscopy', function(theme) {
-    console.log('Publishing theme assets...'.data);
+  staticx.generate.on('theme.assetscopy', function() {
+    console.log('* Publishing theme assets...'.data);
+  });
+
+  staticx.generate.on('pages.reading', function() {
+    console.log('* Reading pages...'.data);
+  });
+
+  staticx.generate.on('pages.processing', function(pages) {
+    console.log(util.format('* Processing %d pages...', pages.length).data);
   });
 
   staticx.generate({
