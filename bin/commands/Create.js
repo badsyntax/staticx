@@ -83,8 +83,5 @@ CreateCommand.prototype.getOptions = function(options, done) {
     message: 'Please enter either \'y\' or \'n\'',
     default: 'n',
     required: true
-  }], function (err, result) {
-    if (err) cliUtil.exit(1, err);
-    done(result);
-  });
+  }], cliUtil.next(done));
 };

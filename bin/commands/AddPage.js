@@ -120,8 +120,5 @@ AddPageCommand.prototype.getOptions = function(options, done) {
       name: 'content',
       description: 'Page content'
     })
-  ], function (err, result) {
-    if (err) cliUtil.exit(1, err);
-    done(_.merge(options, result));
-  });
+  ], cliUtil.next(done));
 };

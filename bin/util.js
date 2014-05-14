@@ -30,8 +30,16 @@ function colorize(code, substr, message, index) {
 exports.exit = function(code, message) {
 
   var args = [].slice.call(arguments, 1)
+    .map(String.bind(null))
     .map(colorize.bind(null, code, /\%[sd]/.test(arguments[1])));
 
   console.log.apply(console, args);
   process.exit(code);
+};
+
+exports.next = function(done) {
+  return function (err, result) {
+    if (err) exports.exit(1, err);
+    done(result);
+  };
 };

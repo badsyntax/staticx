@@ -31,10 +31,19 @@ GenerateCommand.prototype.run = function(options) {
   var start = new Date();
   var staticx = require('../../lib/staticx');
 
+  staticx.generate.on('theme.build', function(theme) {
+    console.log(util.format('Building theme (%s)...', theme).data);
+  });
+
+  staticx.generate.on('theme.assetscopy', function(theme) {
+    console.log('Publishing theme assets...'.data);
+  });
+
   staticx.generate({
     source: options.destination
   }, function(err, pages) {
     if (err) cliUtil.exit(1, err);
+
     var msg = [
       'Successfully generated a site at: %s',
       'Completed in %dms'.data
@@ -62,11 +71,6 @@ GenerateCommand.prototype.getOptions = function(options, done) {
     type: 'string',
     required: true,
     message: 'Path does not exist',
-    conform: function(value) {
-      return fs.existsSync(value);
-    }
-  }], function (err, result) {
-    if (err) cliUtil.exit(1, err);
-    done(result);
-  });
+    conform: fs.existsSync
+  }], cliUtil.next(done));
 };
