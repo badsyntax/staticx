@@ -35,7 +35,9 @@ CreateCommand.prototype.run = function(options) {
   var staticx = require('../../lib/staticx');
 
   options = _.pick(options, 'destination', 'posts');
-  options.source = '../lib/skeleton';
+
+  var cwd = path.dirname(fs.realpathSync(__filename));
+  options.source = path.resolve(cwd, '..', '..', 'lib', 'skeleton');
 
   staticx.create(options, function(err) {
     if (err) cliUtil.exit(1, err);
