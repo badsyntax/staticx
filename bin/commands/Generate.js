@@ -43,6 +43,14 @@ GenerateCommand.prototype.run = function(options) {
     console.log('* Installing theme dependencies...'.data);
   });
 
+  staticx.generate.on('theme.grunt.run', function() {
+    console.log('* Running grunt tasks...'.data)
+  });
+
+  staticx.generate.on('theme.installdeps.client', function() {
+    console.log('* Installing client-side dependencies...'.data)
+  });
+
   staticx.generate.on('pages.reading', function() {
     console.log('* Reading pages...'.data);
   });
