@@ -39,6 +39,10 @@ GenerateCommand.prototype.run = function(options) {
     console.log('* Publishing theme assets...'.data);
   });
 
+  staticx.generate.on('theme.installdeps', function() {
+    console.log('* Installing theme dependencies...'.data);
+  });
+
   staticx.generate.on('pages.reading', function() {
     console.log('* Reading pages...'.data);
   });
