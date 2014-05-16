@@ -31,6 +31,20 @@ util.inherits(CreateCommand, Command);
  */
 CreateCommand.prototype.run = function(options) {
 
+  if (!fs.existsSync(options.destination)) {
+    console.log(
+      'Warning: Destination path does not exist, will attempt to create it.'.warning
+    )
+    try {
+      fs.mkdirSync(options.destination);
+    } catch(e) {
+      console.log(
+        util.format('Error: Unable to create destination directory: %s', e.message).error
+      );
+      return;
+    }
+  }
+
   var start = new Date();
   var staticx = require('../../lib/staticx');
 
